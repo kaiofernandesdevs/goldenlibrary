@@ -10,9 +10,10 @@ public class Book {
 
     @Id
     private String id;
+
     private String title;
     private String author;
-    private Integer quantity;
+    private String genre;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -21,18 +22,18 @@ public class Book {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Book(String title, String author, Integer quantity) {
+    public Book(String title, String author, String genre) {
         this();
         this.title = title;
         this.author = author;
-        this.quantity = quantity;
+        this.genre = genre;
     }
 
     public String getId() {
         return id;
     }
 
-    public static void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -52,12 +53,12 @@ public class Book {
         this.author = author;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public LocalDateTime getCreatedAt() {
