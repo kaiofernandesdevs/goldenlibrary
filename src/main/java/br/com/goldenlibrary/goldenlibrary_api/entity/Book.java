@@ -1,79 +1,88 @@
-package br.com.goldenlibrary.goldenlibrary_api.entity;
+    package br.com.goldenlibrary.goldenlibrary_api.entity;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+    import org.springframework.data.annotation.Id;
+    import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+    import java.time.LocalDateTime;
 
-@Document(collection = "books")
-public class Book {
+    @Document(collection = "books")
+    public class Book {
 
-    @Id
-    private String id;
+        @Id
+        private String id;
+        private String title;
+        private String author;
+        private String genre;
+        private String userId;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
-    private String title;
-    private String author;
-    private String genre;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+        public Book() {
+            this.createdAt = LocalDateTime.now();
+            this.updatedAt = LocalDateTime.now();
+        }
 
-    public Book() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        public Book(String title, String author, String genre, String userId) {
+            this();
+            this.title = title;
+            this.author = author;
+            this.genre = genre;
+            this.userId = userId;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+        }
+
+        public LocalDateTime getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+        }
     }
-
-    public Book(String title, String author, String genre) {
-        this();
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-}
