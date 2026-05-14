@@ -43,6 +43,4 @@ public class AuthDTOs {
     public record ErrorResponse(
             String message
     ) {}
-
-
 }
