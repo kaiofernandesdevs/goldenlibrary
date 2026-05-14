@@ -1,4 +1,4 @@
-package br.com.goldenlibrary.goldenlibrary_api.config;
+package br.com.goldenlibrary.goldenlibrary_api.security;
 
 import br.com.goldenlibrary.goldenlibrary_api.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
