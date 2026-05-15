@@ -57,7 +57,7 @@ public class BookApiController {
     if(!existingBook.isPresent()) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    Book.setId(id);
+    book.setId(id);
     Book updatedBook = bookService.saveBook(book);
     return new ResponseEntity<>(HttpStatus.OK);
     }
