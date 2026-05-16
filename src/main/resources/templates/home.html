@@ -9,13 +9,13 @@
         :root {
             --gold: #C9A84C;
             --gold-light: #E8C97A;
-            --gold-dark: #8B6914;
             --bg: #0D0D0D;
             --bg-card: #141414;
             --bg-card-hover: #1C1C1C;
             --text: #F0EAD6;
             --text-muted: #7A7060;
             --border: #2A2520;
+            --error: #F87171;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,7 +46,6 @@
         .logo span { color: var(--text); font-weight: 400; }
 
         .btn-cadastrar {
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.85rem;
             font-weight: 500;
             letter-spacing: 0.08em;
@@ -54,17 +53,12 @@
             text-decoration: none;
             color: var(--bg);
             background-color: var(--gold);
-            border: none;
             padding: 0.65rem 1.5rem;
             border-radius: 2rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.15s ease;
+            transition: background-color 0.2s, transform 0.15s;
         }
 
-        .btn-cadastrar:hover {
-            background-color: var(--gold-light);
-            transform: translateY(-1px);
-        }
+        .btn-cadastrar:hover { background-color: var(--gold-light); transform: translateY(-1px); }
 
         main {
             max-width: 1100px;
@@ -83,7 +77,6 @@
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
             font-weight: 700;
-            line-height: 1.1;
         }
 
         .section-title em { color: var(--gold); font-style: italic; }
@@ -93,7 +86,6 @@
             color: var(--text-muted);
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            padding-bottom: 0.3rem;
         }
 
         .empty-state {
@@ -138,9 +130,11 @@
             color: var(--text-muted);
         }
 
+        thead th:last-child { text-align: center; }
+
         tbody tr {
             border-bottom: 1px solid var(--border);
-            transition: background-color 0.15s ease;
+            transition: background-color 0.15s;
             animation: fadeInUp 0.3s ease both;
         }
 
@@ -156,26 +150,109 @@
 
         .td-author { color: var(--text-muted); font-size: 0.9rem; }
 
+        .td-year {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--gold-light);
+        }
+
         .td-id {
             font-family: monospace;
             font-size: 0.75rem;
             color: var(--text-muted);
         }
 
-        .quantity-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 2.2rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
+        .td-actions { text-align: center; }
+        .actions-wrap { display: flex; gap: 0.5rem; justify-content: center; }
+
+        .btn-edit, .btn-delete {
+            font-size: 0.75rem;
             font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .qty-ok   { background: rgba(201,168,76,.12); color: var(--gold-light); border: 1px solid rgba(201,168,76,.25); }
-        .qty-low  { background: rgba(239,68,68,.10);  color: #F87171;           border: 1px solid rgba(239,68,68,.20); }
-        .qty-zero { background: rgba(120,120,120,.1); color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-edit {
+            background: rgba(201,168,76,.15);
+            color: var(--gold-light);
+            border: 1px solid rgba(201,168,76,.3);
+        }
+
+        .btn-edit:hover { opacity: 0.8; transform: translateY(-1px); }
+
+        .btn-delete {
+            background: rgba(248,113,113,.1);
+            color: var(--error);
+            border: 1px solid rgba(248,113,113,.25);
+        }
+
+        .btn-delete:hover { opacity: 0.8; transform: translateY(-1px); }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeInUp 0.25s ease both;
+        }
+
+        .modal h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .modal p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+        .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+        .btn-cancelar {
+            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-cancelar:hover { color: var(--text); border-color: var(--text-muted); }
+
+        .btn-confirmar {
+            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: none;
+            background: var(--error);
+            color: #fff;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-confirmar:hover { opacity: 0.85; }
 
         footer {
             text-align: center;
@@ -224,27 +301,77 @@
                 <tr>
                     <th>Título</th>
                     <th>Autor</th>
-                    <th>Qtd.</th>
+                    <th>Ano</th>
                     <th>ID</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="book : ${books}">
                     <td class="td-title"  th:text="${book.title}">Título</td>
                     <td class="td-author" th:text="${book.author}">Autor</td>
-                    <td>
-                        <span th:if="${book.quantity > 5}"                        class="quantity-badge qty-ok"   th:text="${book.quantity}"></span>
-                        <span th:if="${book.quantity > 0 and book.quantity <= 5}" class="quantity-badge qty-low"  th:text="${book.quantity}"></span>
-                        <span th:if="${book.quantity == 0}"                       class="quantity-badge qty-zero">0</span>
+                    <td class="td-year"   th:text="${book.year}">Ano</td>
+                    <td class="td-id"     th:text="${book.id}">id</td>
+                    <td class="td-actions">
+                        <div class="actions-wrap">
+                            <a class="btn-edit" th:href="@{/editar/{id}(id=${book.id})}">Editar</a>
+                            <button class="btn-delete"
+                                    th:data-id="${book.id}"
+                                    th:data-title="${book.title}"
+                                    onclick="confirmarDelete(this)">Deletar</button>
+                        </div>
                     </td>
-                    <td class="td-id" th:text="${book.id}">id</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </main>
 
+<!-- Modal de confirmação -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h3>Confirmar exclusão</h3>
+        <p id="modalMsg">Tem certeza que deseja excluir este livro?</p>
+        <div class="modal-actions">
+            <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+            <button class="btn-confirmar" id="btnConfirmar">Excluir</button>
+        </div>
+    </div>
+</div>
+
 <footer>GoldenLibrary &mdash; Sistema de Gerenciamento de Acervo</footer>
+
+<script>
+    let idParaDeletar = null;
+
+    function confirmarDelete(btn) {
+        idParaDeletar = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title');
+        document.getElementById('modalMsg').textContent = `Tem certeza que deseja excluir "${title}"?`;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function fecharModal() {
+        idParaDeletar = null;
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    document.getElementById('btnConfirmar').addEventListener('click', async () => {
+        if (!idParaDeletar) return;
+        try {
+            const res = await fetch(`/api/books/${idParaDeletar}`, { method: 'DELETE' });
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                alert('Erro ao excluir o livro.');
+            }
+        } catch (e) {
+            alert('Erro de conexão.');
+        } finally {
+            fecharModal();
+        }
+    });
+</script>
 
 </body>
 </html>
