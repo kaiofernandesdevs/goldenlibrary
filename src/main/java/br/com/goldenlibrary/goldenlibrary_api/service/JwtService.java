@@ -35,10 +35,9 @@ public class JwtService {
                 .issuer("goldenlibrary")
                 .issuedAt(now)
                 .expiresAt(expiration)
-                .subject(user.getUsername())
+                .subject(user.getUsername())   // e-mail
                 .claim("name", user.getName())
                 .claim("id", user.getId())
-                .claim("password", user.getPassword())
                 .build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
@@ -54,16 +53,16 @@ public class JwtService {
         return this.jwtDecoder.decode(token);
     }
 
-    public CustomUserDetails getUSerInToken(String token) {
+    public CustomUserDetails getUserInToken(String token) {
         try {
             Jwt jwt = decodedToken(token);
 
             String username = jwt.getSubject();
-            String name = jwt.getClaimAsString("name");
-            String id = jwt.getClaimAsString("id");
-            String password = jwt.getClaimAsString("password");
+            String name     = jwt.getClaimAsString("name");
+            String id       = jwt.getClaimAsString("id");
 
-            return new CustomUserDetails(id, name, username, password);
+            // senha não está mais no token — passamos null (não é usada após autenticação)
+            return new CustomUserDetails(id, name, username, null);
         } catch (JwtException ex) {
             throw ex;
         }

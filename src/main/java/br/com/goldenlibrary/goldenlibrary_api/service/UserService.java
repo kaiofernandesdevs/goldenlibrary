@@ -1,7 +1,7 @@
 package br.com.goldenlibrary.goldenlibrary_api.service;
 
-
 import br.com.goldenlibrary.goldenlibrary_api.entity.User;
+import br.com.goldenlibrary.goldenlibrary_api.enums.UserRole;
 import br.com.goldenlibrary.goldenlibrary_api.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,28 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User addNewUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User addNewUser(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
+            throw new EmailAlreadyExistsException("E-mail passado já está cadastrado");
+        }
+
+        User user = new User(
+                request.name(),
+                request.email(),
+                passwordEncoder.encode(request.password()),
+                UserRole.USER
+        );
 
         return userRepository.save(user);
+    }
+
+    public record RegisterRequest(String name, String email, String password) {}
+
+    public record RegisterResponse(String id, String name, String email) {}
+
+    public static class EmailAlreadyExistsException extends RuntimeException {
+        public EmailAlreadyExistsException(String message) {
+            super(message);
+        }
     }
 }

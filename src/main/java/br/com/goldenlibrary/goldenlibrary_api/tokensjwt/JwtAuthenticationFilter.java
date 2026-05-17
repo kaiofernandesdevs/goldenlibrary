@@ -1,5 +1,6 @@
 package br.com.goldenlibrary.goldenlibrary_api.tokensjwt;
 
+import br.com.goldenlibrary.goldenlibrary_api.repository.UserRepository;
 import br.com.goldenlibrary.goldenlibrary_api.security.CustomUserDetails;
 import br.com.goldenlibrary.goldenlibrary_api.service.JwtService;
 import com.mongodb.lang.NonNull;
@@ -19,9 +20,11 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -40,19 +43,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(7);
 
         try {
-            CustomUserDetails user = jwtService.getUSerInToken(jwt);
+            // Extrai o e-mail do token
+            CustomUserDetails tokenUser = jwtService.getUserInToken(jwt);
 
-            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        user,
-                        null,
-                        user.getAuthorities()
-                );
+            if (tokenUser != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else if (user == null) {
-                SecurityContextHolder.clearContext();
+                // Busca o usuário real no banco pelo e-mail — garante dados completos e senha real
+                userRepository.findByEmail(tokenUser.getUsername()).ifPresent(user -> {
+                    CustomUserDetails userDetails = new CustomUserDetails(user);
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                });
             }
 
         } catch (Exception e) {
