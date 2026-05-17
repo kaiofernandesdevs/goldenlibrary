@@ -1,4 +1,4 @@
-package br.com.goldenlibrary.goldenlibrary_api.tokensjwt;
+package br.com.goldenlibrary.goldenlibrary_api.service;
 
 import br.com.goldenlibrary.goldenlibrary_api.security.CustomUserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -38,6 +38,7 @@ public class JwtService {
                 .subject(user.getUsername())
                 .claim("name", user.getName())
                 .claim("id", user.getId())
+                .claim("password", user.getPassword())
                 .build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
@@ -53,7 +54,6 @@ public class JwtService {
         return this.jwtDecoder.decode(token);
     }
 
-
     public CustomUserDetails getUSerInToken(String token) {
         try {
             Jwt jwt = decodedToken(token);
@@ -61,8 +61,9 @@ public class JwtService {
             String username = jwt.getSubject();
             String name = jwt.getClaimAsString("name");
             String id = jwt.getClaimAsString("id");
+            String password = jwt.getClaimAsString("password");
 
-            return new CustomUserDetails(id, name, username);
+            return new CustomUserDetails(id, name, username, password);
         } catch (JwtException ex) {
             throw ex;
         }

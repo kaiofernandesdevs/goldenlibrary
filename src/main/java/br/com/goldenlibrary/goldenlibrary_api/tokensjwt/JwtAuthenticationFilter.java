@@ -1,6 +1,7 @@
 package br.com.goldenlibrary.goldenlibrary_api.tokensjwt;
 
 import br.com.goldenlibrary.goldenlibrary_api.security.CustomUserDetails;
+import br.com.goldenlibrary.goldenlibrary_api.service.JwtService;
 import com.mongodb.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

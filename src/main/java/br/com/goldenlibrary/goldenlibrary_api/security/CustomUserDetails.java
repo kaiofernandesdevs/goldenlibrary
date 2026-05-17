@@ -1,7 +1,9 @@
 package br.com.goldenlibrary.goldenlibrary_api.security;
 
 import br.com.goldenlibrary.goldenlibrary_api.entity.User;
+import br.com.goldenlibrary.goldenlibrary_api.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -11,11 +13,13 @@ public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
-    public CustomUserDetails(String id, String name, String email) {
+    public CustomUserDetails(String id, String name, String email, String password) {
         this.user = new User();
         this.user.setId(id);
         this.user.setName(name);
         this.user.setEmail(email);
+        this.user.setPassword(password);
+        this.user.setRole(UserRole.USER);
     }
 
     public CustomUserDetails(User user) {
@@ -24,7 +28,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        UserRole role = (user.getRole() != null) ? user.getRole() : UserRole.USER;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
