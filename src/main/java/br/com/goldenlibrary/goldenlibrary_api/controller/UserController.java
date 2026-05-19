@@ -38,18 +38,8 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody @Valid SignupRequest request) {
         try {
-            
             var user = userService.addNewUser(
-                    new RegisterRequest(
-                            request.name(), 
-                            request.email(), 
-                            request.password(),
-                            request.cep(),
-                            request.logradouro(),
-                            request.bairro(),
-                            request.cidade(),
-                            request.uf()
-                    )
+                    new RegisterRequest(request.name(), request.email(), request.password())
             );
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new RegisterResponse(user.getId(), user.getName(), user.getEmail()));
@@ -82,12 +72,7 @@ public class UserController {
     public record SignupRequest(
             @NotBlank(message = "Nome é obrigatório") String name,
             @NotBlank(message = "E-mail é obrigatório") @Email(message = "E-mail inválido") String email,
-            @NotBlank(message = "Senha é obrigatória") @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres") String password,
-            String cep,
-            String logradouro,
-            String bairro,
-            String cidade,
-            String uf
+            @NotBlank(message = "Senha é obrigatória") @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres") String password
     ) {}
 
     public record LoginRequest(
