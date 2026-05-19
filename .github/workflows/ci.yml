@@ -27,13 +27,7 @@ jobs:
       # 3. Dá permissão de execução para o arquivo Maven Wrapper (mvnw)
       - name: Dar permissão ao Maven Wrapper
         run: chmod +x ./mvnw
-      # 4. Compila, roda os testes com JaCoCo e envia para o SonarCloud
-      - name: Rodar Testes e Análise do SonarCloud
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Já vem automático do GitHub
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # O segredo que você salvou no GitHub
-        run: |
-          ./mvnw clean verify sonar:sonar \
-            -Dsonar.projectKey=kaiofernandesdevs_goldenlibrary\
-            -Dsonar.organization=kaiofernandesdevs\
-            -Dsonar.host.url=https://sonarcloud.io
+
+      # 4. Compila o projeto e roda os testes!
+      - name: Rodar Testes e Build
+        run: ./mvnw clean verify
