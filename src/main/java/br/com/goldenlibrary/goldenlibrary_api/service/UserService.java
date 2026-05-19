@@ -26,15 +26,30 @@ public class UserService {
                 request.name(),
                 request.email(),
                 passwordEncoder.encode(request.password()),
-                UserRole.USER
-        );
+                UserRole.USER);
+
+        user.setCep(request.cep());
+        user.setLogradouro(request.logradouro());
+        user.setBairro(request.bairro());
+        user.setCidade(request.cidade());
+        user.setUf(request.uf());
 
         return userRepository.save(user);
     }
 
-    public record RegisterRequest(String name, String email, String password) {}
+    public record RegisterRequest(
+            String name,
+            String email,
+            String password,
+            String cep,
+            String logradouro,
+            String bairro,
+            String cidade,
+            String uf) {
+    }
 
-    public record RegisterResponse(String id, String name, String email) {}
+    public record RegisterResponse(String id, String name, String email) {
+    }
 
     public static class EmailAlreadyExistsException extends RuntimeException {
         public EmailAlreadyExistsException(String message) {
