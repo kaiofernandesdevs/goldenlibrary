@@ -9,5 +9,4 @@ public class GoldenlibraryApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GoldenlibraryApiApplication.class, args);
 	}
-
 }

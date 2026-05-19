@@ -1,5 +1,6 @@
 package br.com.goldenlibrary.goldenlibrary_api.entity;
 
+
 import br.com.goldenlibrary.goldenlibrary_api.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;

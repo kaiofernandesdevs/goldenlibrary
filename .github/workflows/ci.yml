@@ -1,0 +1,33 @@
+name: Spring Boot CI
+
+# O CI vai rodar sempre que houver um push ou Pull Request para a branch 'main'
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # O robô vai rodar num Linux Ubuntu
+
+    steps:
+      # 1. Faz o download do seu código para a máquina do robô
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Instala o Java 21
+      - name: Configurar o Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven # Guarda os pacotes do Maven para deixar os próximos CIs mais rápidos
+
+      # 3. Dá permissão de execução para o arquivo Maven Wrapper (mvnw)
+      - name: Dar permissão ao Maven Wrapper
+        run: chmod +x ./mvnw
+
+      # 4. Compila o projeto e roda os testes!
+      - name: Rodar Testes e Build
+        run: ./mvnw clean verify
