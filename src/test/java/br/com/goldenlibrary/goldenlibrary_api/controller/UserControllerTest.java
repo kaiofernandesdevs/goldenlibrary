@@ -23,17 +23,13 @@ class UserControllerTest extends MongoIntegrationTest {
     @Autowired private UserRepository userRepository;
 
     @BeforeEach
-    void limparBanco() {
+    void clearDatabase() {
         userRepository.deleteAll();
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    // POST /user/signup — cadastro
-    // ═══════════════════════════════════════════════════════════════════
-
     @Test
     @DisplayName("deve cadastrar usuário e retornar 201 — UC-001 Fluxo 1.1")
-    void deveCadastrarUsuario() throws Exception {
+    void shouldRegisterUserAndReturn201() throws Exception {
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -47,13 +43,12 @@ class UserControllerTest extends MongoIntegrationTest {
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.name").value("Kaio"))
                 .andExpect(jsonPath("$.email").value("kaio@email.com"))
-                // Senha nunca deve aparecer na resposta
                 .andExpect(jsonPath("$.password").doesNotExist());
     }
 
     @Test
     @DisplayName("deve retornar 400 para e-mail duplicado — UC-001 E1")
-    void deveRetornar400ParaEmailDuplicado() throws Exception {
+    void shouldReturn400ForDuplicateEmail() throws Exception {
         String body = """
                 {
                   "name": "Kaio",
@@ -62,13 +57,11 @@ class UserControllerTest extends MongoIntegrationTest {
                 }
                 """;
 
-        // Primeiro cadastro — sucesso
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isCreated());
 
-        // Segundo cadastro com mesmo e-mail — deve falhar
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
@@ -78,7 +71,7 @@ class UserControllerTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve retornar 400 quando nome está em branco — UC-001 E2")
-    void deveRetornar400NomeEmBranco() throws Exception {
+    void shouldReturn400WhenNameIsBlank() throws Exception {
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -93,13 +86,13 @@ class UserControllerTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve retornar 400 quando e-mail é inválido — UC-001 E2")
-    void deveRetornar400EmailInvalido() throws Exception {
+    void shouldReturn400WhenEmailIsInvalid() throws Exception {
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
                                   "name": "Kaio",
-                                  "email": "email-invalido",
+                                  "email": "invalid-email",
                                   "password": "senha123"
                                 }
                                 """))
@@ -108,7 +101,7 @@ class UserControllerTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve retornar 400 quando senha tem menos de 6 caracteres — UC-001 E2")
-    void deveRetornar400SenhaCurta() throws Exception {
+    void shouldReturn400WhenPasswordIsTooShort() throws Exception {
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -121,14 +114,9 @@ class UserControllerTest extends MongoIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    // POST /user/login — autenticação
-    // ═══════════════════════════════════════════════════════════════════
-
     @Test
     @DisplayName("deve autenticar e retornar token JWT — UC-001 Fluxo 1.2")
-    void deveAutenticarERetornarToken() throws Exception {
-        // Cadastra primeiro
+    void shouldAuthenticateAndReturnJwtToken() throws Exception {
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -140,7 +128,6 @@ class UserControllerTest extends MongoIntegrationTest {
                                 """))
                 .andExpect(status().isCreated());
 
-        // Faz login
         mockMvc.perform(post("/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -156,12 +143,12 @@ class UserControllerTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve retornar 401 para credenciais inválidas — UC-001 Fluxo 1.2")
-    void deveRetornar401CredenciaisInvalidas() throws Exception {
+    void shouldReturn401ForInvalidCredentials() throws Exception {
         mockMvc.perform(post("/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
-                                  "email": "naoexiste@email.com",
+                                  "email": "notfound@email.com",
                                   "password": "senha123"
                                 }
                                 """))
@@ -171,7 +158,7 @@ class UserControllerTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve retornar 401 para senha incorreta — UC-001 Fluxo 1.2")
-    void deveRetornar401SenhaIncorreta() throws Exception {
+    void shouldReturn401ForWrongPassword() throws Exception {
         mockMvc.perform(post("/user/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -188,7 +175,7 @@ class UserControllerTest extends MongoIntegrationTest {
                         .content("""
                                 {
                                   "email": "kaio@email.com",
-                                  "password": "senhaerrada"
+                                  "password": "wrongpassword"
                                 }
                                 """))
                 .andExpect(status().isUnauthorized());
