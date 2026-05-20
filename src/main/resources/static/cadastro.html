@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -170,8 +170,8 @@
 <body>
 
 <header>
-    <a href="/" class="logo">Golden<span>Library</span></a>
-    <a href="/" class="btn-voltar">← Voltar ao Acervo</a>
+    <a href="/home.html" class="logo">Golden<span>Library</span></a>
+    <a href="/home.html" class="btn-voltar">← Voltar ao Acervo</a>
 </header>
 
 <main>
@@ -207,6 +207,7 @@
         const year     = parseInt(document.getElementById('year').value);
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
+        const token    = localStorage.getItem('token');
 
         feedback.className = 'feedback';
         feedback.textContent = '';
@@ -223,20 +224,20 @@
         try {
             const response = await fetch('/api/books', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ title, author, year })
             });
 
             if (response.ok) {
                 feedback.className = 'feedback success';
                 feedback.textContent = 'Livro cadastrado com sucesso!';
-                document.getElementById('title').value = '';
-                document.getElementById('author').value = '';
-                document.getElementById('year').value = '';
-                setTimeout(() => window.location.href = '/', 1500);
+                setTimeout(() => window.location.href = '/home.html', 1500);
             } else {
                 feedback.className = 'feedback error';
-                feedback.textContent = 'Erro ao cadastrar. Tente novamente.';
+                feedback.textContent = 'Erro ao cadastrar. Verifique sua sessão.';
             }
         } catch (e) {
             feedback.className = 'feedback error';
@@ -247,6 +248,5 @@
         }
     }
 </script>
-
 </body>
 </html>

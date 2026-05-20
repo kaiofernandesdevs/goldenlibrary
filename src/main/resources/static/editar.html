@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -169,30 +169,30 @@
 <body>
 
 <header>
-    <a href="/" class="logo">Golden<span>Library</span></a>
-    <a href="/" class="btn-voltar">← Voltar ao Acervo</a>
+    <a href="/home.html" class="logo">Golden<span>Library</span></a>
+    <a href="/home.html" class="btn-voltar">← Voltar ao Acervo</a>
 </header>
 
 <main>
     <h1 class="page-title">Editar <em>Livro</em></h1>
     <p class="page-subtitle">Altere os dados do livro e salve as mudanças.</p>
 
-    <input type="hidden" id="bookId" th:value="${book.id}" />
+    <input type="hidden" id="bookId" />
 
     <div class="form-card">
         <div class="form-group">
             <label for="title">Título</label>
-            <input type="text" id="title" th:value="${book.title}" placeholder="Ex: Dom Casmurro" />
+            <input type="text" id="title" placeholder="Ex: Dom Casmurro" />
         </div>
 
         <div class="form-group">
             <label for="author">Autor</label>
-            <input type="text" id="author" th:value="${book.author}" placeholder="Ex: Machado de Assis" />
+            <input type="text" id="author" placeholder="Ex: Machado de Assis" />
         </div>
 
         <div class="form-group">
             <label for="year">Ano de Publicação</label>
-            <input type="number" id="year" th:value="${book.year}" placeholder="Ex: 1899" min="1000" max="2099" />
+            <input type="number" id="year" placeholder="Ex: 1899" min="1000" max="2099" />
         </div>
 
         <div id="feedback" class="feedback"></div>
@@ -202,6 +202,39 @@
 </main>
 
 <script>
+    const token = localStorage.getItem('token');
+    const urlParams = new URLSearchParams(window.location.search);
+    const idDoLivro = urlParams.get('id');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!token || !idDoLivro) {
+            window.location.href = '/home.html';
+            return;
+        }
+        buscarDadosDoLivro();
+    });
+
+    async function buscarDadosDoLivro() {
+        try {
+            const res = await fetch(`/api/books/${idDoLivro}`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const book = await res.json();
+                document.getElementById('bookId').value = book.id;
+                document.getElementById('title').value = book.title;
+                document.getElementById('author').value = book.author;
+                document.getElementById('year').value = book.year;
+            } else {
+                alert('Erro ao buscar dados do livro.');
+                window.location.href = '/home.html';
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     async function salvarEdicao() {
         const id       = document.getElementById('bookId').value;
         const title    = document.getElementById('title').value.trim();
@@ -225,14 +258,17 @@
         try {
             const res = await fetch(`/api/books/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ title, author, year })
             });
 
             if (res.ok) {
                 feedback.className = 'feedback success';
                 feedback.textContent = 'Livro atualizado com sucesso!';
-                setTimeout(() => window.location.href = '/', 1500);
+                setTimeout(() => window.location.href = '/home.html', 1500);
             } else {
                 feedback.className = 'feedback error';
                 feedback.textContent = 'Erro ao atualizar. Tente novamente.';
@@ -246,6 +282,5 @@
         }
     }
 </script>
-
 </body>
 </html>

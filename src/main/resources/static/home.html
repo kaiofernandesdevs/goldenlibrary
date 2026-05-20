@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -89,6 +89,7 @@
         }
 
         .empty-state {
+            display: none;
             text-align: center;
             padding: 6rem 2rem;
             border: 1px dashed var(--border);
@@ -107,6 +108,7 @@
         .empty-state p { font-size: 0.9rem; color: var(--text-muted); }
 
         .table-wrapper {
+            display: none;
             border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
@@ -268,34 +270,28 @@
             from { opacity: 0; transform: translateY(16px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-
-        tbody tr:nth-child(1) { animation-delay: 0.05s; }
-        tbody tr:nth-child(2) { animation-delay: 0.10s; }
-        tbody tr:nth-child(3) { animation-delay: 0.15s; }
-        tbody tr:nth-child(4) { animation-delay: 0.20s; }
-        tbody tr:nth-child(5) { animation-delay: 0.25s; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">Golden<span>Library</span></div>
-    <a href="/cadastro" class="btn-cadastrar">+ Cadastrar Livro</a>
+    <a href="/cadastro.html" class="btn-cadastrar">+ Cadastrar Livro</a>
 </header>
 
 <main>
     <div class="section-header">
         <h1 class="section-title">Nosso <em>Acervo</em></h1>
-        <span class="book-count" th:text="${#lists.size(books)} + ' livro(s) cadastrado(s)'"></span>
+        <span class="book-count" id="bookCount">0 livro(s) cadastrado(s)</span>
     </div>
 
-    <div class="empty-state" th:if="${#lists.isEmpty(books)}">
+    <div class="empty-state" id="emptyState">
         <div class="icon">📚</div>
         <h3>Nenhum livro cadastrado</h3>
         <p>Clique em "Cadastrar Livro" para adicionar o primeiro.</p>
     </div>
 
-    <div class="table-wrapper" th:if="${not #lists.isEmpty(books)}">
+    <div class="table-wrapper" id="tableWrapper">
         <table>
             <thead>
                 <tr>
@@ -306,28 +302,12 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="book : ${books}">
-                    <td class="td-title"  th:text="${book.title}">Título</td>
-                    <td class="td-author" th:text="${book.author}">Autor</td>
-                    <td class="td-year"   th:text="${book.year}">Ano</td>
-                    <td class="td-id"     th:text="${book.id}">id</td>
-                    <td class="td-actions">
-                        <div class="actions-wrap">
-                            <a class="btn-edit" th:href="@{/editar/{id}(id=${book.id})}">Editar</a>
-                            <button class="btn-delete"
-                                    th:data-id="${book.id}"
-                                    th:data-title="${book.title}"
-                                    onclick="confirmarDelete(this)">Deletar</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+            <tbody id="tabelaLivros">
+                </tbody>
         </table>
     </div>
 </main>
 
-<!-- Modal de confirmação -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
         <h3>Confirmar exclusão</h3>
@@ -343,6 +323,74 @@
 
 <script>
     let idParaDeletar = null;
+    const token = localStorage.getItem('token');
+
+    // Executa ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!token) {
+            window.location.href = '/cadastro_usuario.html'; // Altere para sua tela de login padrão se houver uma específica
+            return;
+        }
+        carregarLivros();
+    });
+
+    async function carregarLivros() {
+        try {
+            const res = await fetch('/api/books', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (res.ok) {
+                const books = await res.json();
+                renderizarLivros(books);
+            } else if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('token');
+                window.location.href = '/cadastro_usuario.html';
+            }
+        } catch (e) {
+            console.error("Erro ao carregar livros:", e);
+        }
+    }
+
+    function renderizarLivros(books) {
+        const tbody = document.getElementById('tabelaLivros');
+        const emptyState = document.getElementById('emptyState');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const bookCount = document.getElementById('bookCount');
+
+        bookCount.textContent = `${books.length} livro(s) cadastrado(s)`;
+        tbody.innerHTML = '';
+
+        if (books.length === 0) {
+            emptyState.style.display = 'block';
+            tableWrapper.style.display = 'none';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        tableWrapper.style.display = 'block';
+
+        books.forEach(book => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="td-title">${book.title}</td>
+                <td class="td-author">${book.author}</td>
+                <td class="td-year">${book.year}</td>
+                <td class="td-id">${book.id}</td>
+                <td class="td-actions">
+                    <div class="actions-wrap">
+                        <a class="btn-edit" href="/editar.html?id=${book.id}">Editar</a>
+                        <button class="btn-delete" data-id="${book.id}" data-title="${book.title}" onclick="confirmarDelete(this)">Deletar</button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
 
     function confirmarDelete(btn) {
         idParaDeletar = btn.getAttribute('data-id');
@@ -359,9 +407,12 @@
     document.getElementById('btnConfirmar').addEventListener('click', async () => {
         if (!idParaDeletar) return;
         try {
-            const res = await fetch(`/api/books/${idParaDeletar}`, { method: 'DELETE' });
+            const res = await fetch(`/api/books/${idParaDeletar}`, { 
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (res.ok) {
-                window.location.reload();
+                carregarLivros();
             } else {
                 alert('Erro ao excluir o livro.');
             }
@@ -372,6 +423,5 @@
         }
     });
 </script>
-
 </body>
 </html>

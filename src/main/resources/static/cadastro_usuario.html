@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -170,8 +170,8 @@
 <body>
 
 <header>
-    <a href="/" class="logo">Golden<span>Library</span></a>
-    <a href="/login" class="btn-voltar">← Voltar ao Login</a>
+    <a href="/home.html" class="logo">Golden<span>Library</span></a>
+    <a href="/cadastro_usuario.html" class="btn-voltar">← Voltar ao Login</a>
 </header>
 
 <main>
@@ -223,7 +223,6 @@
 </main>
 
 <script>
-    // 1. LÓGICA DO VIA CEP
     const inputCep = document.getElementById('cep');
     inputCep.addEventListener('blur', async () => {
         let cepDigitado = inputCep.value.replace(/\D/g, '');
@@ -245,7 +244,6 @@
         }
     });
 
-    // 2. LÓGICA DE CADASTRO NO BACKEND
     document.getElementById('btnSalvar').addEventListener('click', async () => {
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
@@ -264,7 +262,6 @@
         }
 
         try {
-            // Chamando a rota do UserController
             const res = await fetch('/user/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -274,7 +271,7 @@
             if (res.ok) {
                 feedback.className = 'feedback success';
                 feedback.textContent = 'Conta criada com sucesso!';
-                setTimeout(() => window.location.href = '/login', 1500); // Redireciona para o login
+                setTimeout(() => window.location.href = '/home.html', 1500);
             } else {
                 feedback.className = 'feedback error';
                 feedback.textContent = 'Erro ao criar conta. E-mail pode já estar em uso.';
