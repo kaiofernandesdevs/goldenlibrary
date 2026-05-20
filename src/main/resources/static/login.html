@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login — GoldenLibrary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C97A;
+            --bg: #0D0D0D;
+            --bg-card: #141414;
+            --text: #F0EAD6;
+            --text-muted: #7A7060;
+            --border: #2A2520;
+            --input-bg: #111111;
+            --error: #F87171;
+            --success: #6EE7B7;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--text); font-weight: 400; }
+
+        .btn-voltar {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-voltar:hover { color: var(--text); border-color: var(--text-muted); }
+
+        main {
+            max-width: 480px;
+            width: 100%;
+            margin: 5rem auto;
+            padding: 0 2rem;
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .page-title em { color: var(--gold); font-style: italic; }
+
+        .page-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .form-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            padding: 0.85rem 1rem;
+            transition: border-color 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        input:focus { border-color: var(--gold); }
+        input::placeholder { color: var(--text-muted); }
+
+        .btn-submit {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--bg);
+            background-color: var(--gold);
+            border: none;
+            padding: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.15s;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .btn-submit:hover { background-color: var(--gold-light); transform: translateY(-1px); }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .feedback {
+            display: none;
+            padding: 0.85rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .feedback.success {
+            display: block;
+            background: rgba(110,231,183,.1);
+            border: 1px solid rgba(110,231,183,.25);
+            color: var(--success);
+        }
+
+        .feedback.error {
+            display: block;
+            background: rgba(248,113,113,.1);
+            border: 1px solid rgba(248,113,113,.2);
+            color: var(--error);
+        }
+
+        .link-cadastrar {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .link-cadastrar a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .link-cadastrar a:hover {
+            color: var(--gold-light);
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="#" class="logo">Golden<span>Library</span></a>
+    <a href="/cadastro_usuario.html" class="btn-voltar">Criar Conta</a>
+</header>
+
+<main>
+    <h1 class="page-title">Acessar <em>Conta</em></h1>
+    <p class="page-subtitle">Insira suas credenciais para gerenciar o acervo.</p>
+
+    <div class="form-card">
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" placeholder="Digite seu e-mail cadastrado" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" placeholder="Digite sua senha" />
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+
+        <button class="btn-submit" id="btnLogin">Entrar no Sistema</button>
+    </div>
+
+    <div class="link-cadastrar">
+        Ainda não tem uma conta? <a href="/cadastro_usuario.html">Cadastre-se aqui</a>.
+    </div>
+</main>
+
+<script>
+    // Limpa o token atual ao carregar a página de login por segurança
+    document.addEventListener('DOMContentLoaded', () => {
+        localStorage.removeItem('token');
+    });
+
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const feedback = document.getElementById('feedback');
+        const btn = document.getElementById('btnLogin');
+
+        feedback.className = 'feedback';
+        feedback.textContent = '';
+
+        if (!email || !password) {
+            feedback.className = 'feedback error';
+            feedback.textContent = 'Por favor, preencha o e-mail e a senha.';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Autenticando...';
+
+        try {
+            // Nota: Confirme se a sua rota de login no UserController é realmente "/user/login". 
+            // Caso seja diferente (ex: "/api/auth/login"), ajuste a URL abaixo.
+            const response = await fetch('/user/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                
+                // O backend deve retornar um JSON contendo o token JWT
+                // Exemplo esperado do Spring Boot: { "token": "eyJhbGciOiJIUzI1NiIsInR5c..." }
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    feedback.className = 'feedback success';
+                    feedback.textContent = 'Login efetuado com sucesso! Redirecionando...';
+                    
+                    // Redireciona para o painel principal após o login
+                    setTimeout(() => {
+                        window.location.href = '/home.html';
+                    }, 1000);
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = 'Erro ao processar o token de acesso.';
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = 'Credenciais inválidas. Verifique seu e-mail e senha.';
+            }
+        } catch (error) {
+            feedback.className = 'feedback error';
+            feedback.textContent = 'Erro de conexão com o servidor. Tente novamente mais tarde.';
+        } finally {
+            if (!feedback.classList.contains('success')) {
+                btn.disabled = false;
+                btn.textContent = 'Entrar no Sistema';
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
