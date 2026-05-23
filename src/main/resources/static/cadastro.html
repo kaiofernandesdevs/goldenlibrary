@@ -201,7 +201,12 @@
             <input type="text" id="genre" placeholder="Ex: Romance, Suspense, Biografia" />
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
+            <label for="genre">Ano</label>
+            <input type="text" id="year" placeholder="Ex: 1900, 2026" />
+        </div> -->
+
+        <!-- <div class="form-group">
             <label for="status">Status de Leitura</label>
             <select id="status">
                 <option value="" disabled selected>Selecione o status</option>
@@ -209,7 +214,7 @@
                 <option value="LENDO">Lendo</option>
                 <option value="LIDO">Lido</option>
             </select>
-        </div>
+        </div> -->
 
         <div id="feedback" class="feedback"></div>
 
@@ -230,8 +235,8 @@
         const title    = document.getElementById('title').value.trim();
         const author   = document.getElementById('author').value.trim();
         const genre    = document.getElementById('genre').value.trim();
-        const year    = document.getElementById('year').value.trim();
-        const status   = document.getElementById('status').value;
+        // const year    = document.getElementById('year').value.trim();
+        // const status   = document.getElementById('status').value;
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
         const token    = localStorage.getItem('token');
@@ -239,7 +244,7 @@
         feedback.className = 'feedback';
         feedback.textContent = '';
 
-        if (!title || !author || !genre || !status) {
+        if (!title || !author || !genre) {
             feedback.className = 'feedback error';
             feedback.textContent = 'Por favor, preencha todos os campos.';
             return;
@@ -255,9 +260,9 @@
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ title, author, genre, year, status })
+                body: JSON.stringify({ "userId":"2", title, author, genre, "status": "WANT_TO_READ","createdAt": "2026-05-23T05:05:09.117Z",  "updatedAt": "2026-05-23T05:05:09.117Z" })
             });
-
+            console.log(response);
             if (response.ok) {
                 feedback.className = 'feedback success';
                 feedback.textContent = 'Livro cadastrado com sucesso!';

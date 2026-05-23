@@ -1,5 +1,13 @@
 package br.com.goldenlibrary.goldenlibrary_api.controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
+@Controller
 public class HomeController {
-    
+
+    @GetMapping("/")
+    public String index() {
+        // Redireciona automaticamente a raiz (/) para a página de login estática
+        return "redirect:/home.html";
+    }
 }

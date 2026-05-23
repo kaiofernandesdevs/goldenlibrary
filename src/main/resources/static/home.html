@@ -89,7 +89,6 @@
         }
 
         .empty-state {
-            display: none;
             text-align: center;
             padding: 6rem 2rem;
             border: 1px dashed var(--border);
@@ -108,7 +107,6 @@
         .empty-state p { font-size: 0.9rem; color: var(--text-muted); }
 
         .table-wrapper {
-            display: none;
             border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
@@ -297,6 +295,8 @@
                 <tr>
                     <th>Título</th>
                     <th>Autor</th>
+                    <th>Ano</th>
+                    <th>Gênero</th>
                     <th>ID</th>
                     <th>Ações</th>
                 </tr>
@@ -335,12 +335,13 @@
     });
 
     async function carregarLivros() {
+        const token = localStorage.getItem('token');
         try {
             const res = await fetch('/books', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
