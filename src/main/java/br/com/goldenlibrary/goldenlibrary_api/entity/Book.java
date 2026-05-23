@@ -35,10 +35,10 @@
         private LocalDateTime updatedAt;
 
 
-        // public Book() {
-        //     this.createdAt = LocalDateTime.now();
-        //     this.updatedAt = LocalDateTime.now();
-        // }
+        public Book() {
+            this.createdAt = LocalDateTime.now();
+            this.updatedAt = LocalDateTime.now();
+        }
         
         public Book(String id, String userId, String title, String author, String genre,ReadingStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
             this.id = id;

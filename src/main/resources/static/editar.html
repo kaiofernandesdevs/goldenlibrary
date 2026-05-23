@@ -190,6 +190,21 @@
             <input type="text" id="author" placeholder="Ex: Machado de Assis" />
         </div>
 
+        <div class="form-group">
+            <label for="genre">Gênero</label>
+            <input type="text" id="genre" placeholder="Ex: Romance, Suspense, Biografia" />
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status de Leitura</label>
+            <select id="status">
+                <option value="" disabled selected>Selecione o status</option>
+                <option value="WANT_TO_READ">Quero Ler</option>
+                <option value="READING">Lendo</option>
+                <option value="READ">Lido</option>
+            </select>
+        </div>
+
         <!-- <div class="form-group">
             <label for="year">Ano de Publicação</label>
             <input type="number" id="year" placeholder="Ex: 1899" min="1000" max="2099" />
@@ -242,6 +257,8 @@
         const id       = document.getElementById('bookId').value;
         const title    = document.getElementById('title').value.trim();
         const author   = document.getElementById('author').value.trim();
+        const genre    = document.getElementById('genre').value.trim();
+        const status   = document.getElementById('status').value;
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
 
@@ -264,7 +281,7 @@
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ title, author })
+                body: JSON.stringify({ title, author, genre, status })
             });
 
             if (res.ok) {

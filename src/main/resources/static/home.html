@@ -295,7 +295,7 @@
                 <tr>
                     <th>Título</th>
                     <th>Autor</th>
-                    <th>Ano</th>
+                    <!-- <th>Ano</th> -->
                     <th>Gênero</th>
                     <th>ID</th>
                     <th>Ações</th>
@@ -380,7 +380,7 @@
             tr.innerHTML = `
                 <td class="td-title">${book.title}</td>
                 <td class="td-author">${book.author}</td>
-                <td class="td-year">${book.year}</td>
+                <td class="td-year">${book.genre}</td>
                 <td class="td-id">${book.id}</td>
                 <td class="td-actions">
                     <div class="actions-wrap">
@@ -394,6 +394,7 @@
     }
 
     function confirmarDelete(btn) {
+        const token = localStorage.getItem('token');
         idParaDeletar = btn.getAttribute('data-id');
         const title = btn.getAttribute('data-title');
         document.getElementById('modalMsg').textContent = `Tem certeza que deseja excluir "${title}"?`;
@@ -406,9 +407,10 @@
     }
 
     document.getElementById('btnConfirmar').addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
         if (!idParaDeletar) return;
         try {
-            const res = await fetch(`/api/books/${idParaDeletar}`, { 
+            const res = await fetch(`/books/${idParaDeletar}`, { 
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

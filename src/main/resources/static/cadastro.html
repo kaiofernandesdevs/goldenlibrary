@@ -206,7 +206,7 @@
             <input type="text" id="year" placeholder="Ex: 1900, 2026" />
         </div> -->
 
-        <!-- <div class="form-group">
+        <div class="form-group">
             <label for="status">Status de Leitura</label>
             <select id="status">
                 <option value="" disabled selected>Selecione o status</option>
@@ -214,7 +214,7 @@
                 <option value="LENDO">Lendo</option>
                 <option value="LIDO">Lido</option>
             </select>
-        </div> -->
+        </div>
 
         <div id="feedback" class="feedback"></div>
 
@@ -236,7 +236,7 @@
         const author   = document.getElementById('author').value.trim();
         const genre    = document.getElementById('genre').value.trim();
         // const year    = document.getElementById('year').value.trim();
-        // const status   = document.getElementById('status').value;
+        const status   = document.getElementById('status').value;
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
         const token    = localStorage.getItem('token');
