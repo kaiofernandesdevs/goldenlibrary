@@ -72,7 +72,11 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html")
+                                "/swagger-ui.html",
+                                "/*.html",        // Permite acesso a todos os ficheiros HTML
+                                "/",              // Permite acesso à raiz do site
+                                "/favicon.ico",   // Permite o ícone do navegador
+                                "/user/**")
                         .permitAll()
                         .requestMatchers("/user/**").permitAll()
                         .anyRequest().authenticated())

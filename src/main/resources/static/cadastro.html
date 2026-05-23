@@ -64,7 +64,7 @@
 
         main {
             max-width: 560px;
-            margin: 5rem auto;
+            margin: 4rem auto;
             padding: 0 2rem;
             animation: fadeInUp 0.4s ease both;
         }
@@ -104,7 +104,7 @@
             color: var(--text-muted);
         }
 
-        input {
+        input, select {
             background-color: var(--input-bg);
             border: 1px solid var(--border);
             border-radius: 6px;
@@ -115,9 +115,16 @@
             transition: border-color 0.2s;
             outline: none;
             width: 100%;
+            appearance: none; /* Remove seta padrão em alguns navegadores */
         }
 
-        input:focus { border-color: var(--gold); }
+        select {
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%237A7060' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        input:focus, select:focus { border-color: var(--gold); }
         input::placeholder { color: var(--text-muted); }
 
         .btn-submit {
@@ -170,8 +177,8 @@
 <body>
 
 <header>
-    <a href="/home.html" class="logo">Golden<span>Library</span></a>
-    <a href="/home.html" class="btn-voltar">← Voltar ao Acervo</a>
+    <a href="/" class="logo">Golden<span>Library</span></a>
+    <a href="/" class="btn-voltar">← Voltar ao Acervo</a>
 </header>
 
 <main>
@@ -190,8 +197,18 @@
         </div>
 
         <div class="form-group">
-            <label for="year">Ano de Publicação</label>
-            <input type="number" id="year" placeholder="Ex: 1899" min="1000" max="2099" />
+            <label for="genre">Gênero</label>
+            <input type="text" id="genre" placeholder="Ex: Romance, Suspense, Biografia" />
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status de Leitura</label>
+            <select id="status">
+                <option value="" disabled selected>Selecione o status</option>
+                <option value="QUERO_LER">Quero Ler</option>
+                <option value="LENDO">Lendo</option>
+                <option value="LIDO">Lido</option>
+            </select>
         </div>
 
         <div id="feedback" class="feedback"></div>
@@ -201,10 +218,20 @@
 </main>
 
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Acesso negado. Por favor, faça login.');
+            window.location.href = '/login';
+        }
+    });
+
     async function cadastrarLivro() {
         const title    = document.getElementById('title').value.trim();
         const author   = document.getElementById('author').value.trim();
-        const year     = parseInt(document.getElementById('year').value);
+        const genre    = document.getElementById('genre').value.trim();
+        const year    = document.getElementById('year').value.trim();
+        const status   = document.getElementById('status').value;
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
         const token    = localStorage.getItem('token');
@@ -212,9 +239,9 @@
         feedback.className = 'feedback';
         feedback.textContent = '';
 
-        if (!title || !author || isNaN(year)) {
+        if (!title || !author || !genre || !status) {
             feedback.className = 'feedback error';
-            feedback.textContent = 'Preencha todos os campos corretamente.';
+            feedback.textContent = 'Por favor, preencha todos os campos.';
             return;
         }
 
@@ -222,26 +249,34 @@
         btn.textContent = 'Salvando...';
 
         try {
-            const response = await fetch('/api/books', {
+            const response = await fetch('/books', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ title, author, year })
+                body: JSON.stringify({ title, author, genre, year, status })
             });
 
             if (response.ok) {
                 feedback.className = 'feedback success';
                 feedback.textContent = 'Livro cadastrado com sucesso!';
-                setTimeout(() => window.location.href = '/home.html', 1500);
+                setTimeout(() => window.location.href = '/', 1500);
             } else {
                 feedback.className = 'feedback error';
-                feedback.textContent = 'Erro ao cadastrar. Verifique sua sessão.';
+                if (response.status === 401 || response.status === 403) {
+                    feedback.textContent = 'Sua sessão expirou ou você não tem permissão. Faça login novamente.';
+                } else if (response.status === 400) {
+                    feedback.textContent = 'Dados inválidos. Verifique as restrições dos campos.';
+                } else {
+                    feedback.textContent = 'Erro ao cadastrar. Código: ' + response.status;
+                }
+                console.error('Erro retornado pelo servidor:', response.status);
             }
         } catch (e) {
             feedback.className = 'feedback error';
             feedback.textContent = 'Erro de conexão com o servidor.';
+            console.error(e);
         } finally {
             btn.disabled = false;
             btn.textContent = 'Salvar Livro';

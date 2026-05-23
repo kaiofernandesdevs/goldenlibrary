@@ -25,6 +25,9 @@
         @NotBlank(message = "Gênero é obrigatorio")
         private String genre;
 
+        @NotNull(message = "Ano de lançamento")
+        private String year;
+
         @NotNull(message = "Status de leitura é obrigatorio")
         private ReadingStatus status;
 
@@ -37,12 +40,13 @@
             this.updatedAt = LocalDateTime.now();
         }
 
-        public Book(String id, String userId, String title, String author, String genre, ReadingStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        public Book(String id, String userId, String title, String author, String genre, String year,ReadingStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
             this.id = id;
             this.userId = userId;
             this.title = title;
             this.author = author;
             this.genre = genre;
+            this.year = year;
             this.status = status;
             this.createdAt = createdAt;
             this.updatedAt = updatedAt;
@@ -110,5 +114,13 @@
 
         public void setUpdatedAt(LocalDateTime updatedAt) {
             this.updatedAt = updatedAt;
+        }
+
+        public String getYear() {
+            return year;
+        }
+
+        public void setYear(String year) {
+            this.year = year;
         }
     }

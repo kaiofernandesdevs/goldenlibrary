@@ -297,7 +297,6 @@
                 <tr>
                     <th>Título</th>
                     <th>Autor</th>
-                    <th>Ano</th>
                     <th>ID</th>
                     <th>Ações</th>
                 </tr>
@@ -323,12 +322,13 @@
 
 <script>
     let idParaDeletar = null;
-    const token = localStorage.getItem('token');
-
+    
     // Executa ao carregar a página
     document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        
         if (!token) {
-            window.location.href = '/cadastro_usuario.html'; // Altere para sua tela de login padrão se houver uma específica
+            window.location.href = '/login.html'; // Altere para sua tela de login padrão se houver uma específica
             return;
         }
         carregarLivros();
@@ -336,7 +336,7 @@
 
     async function carregarLivros() {
         try {
-            const res = await fetch('/api/books', {
+            const res = await fetch('/books', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

@@ -259,7 +259,7 @@
 
             if (response.ok) {
                 const data = await response.json();
-                
+                alert(response)
                 // O backend deve retornar um JSON contendo o token JWT
                 // Exemplo esperado do Spring Boot: { "token": "eyJhbGciOiJIUzI1NiIsInR5c..." }
                 if (data.token) {
