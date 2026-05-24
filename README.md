@@ -1,16 +1,6 @@
 # 📚 GoldenLibrary
 
 <div align="center">
-
-```text
- ██████╗  ██████╗ ██╗     ██████╗ ███████╗███╗   ██╗██╗     ██╗██████╗ ██████╗  █████╗ ██████╗ ██╗   ██╗
-██╔════╝ ██╔═══██╗██║     ██╔══██╗██╔════╝████╗  ██║██║     ██║██╔══██╗██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝
-██║  ███╗██║   ██║██║     ██║  ██║█████╗  ██╔██╗ ██║██║     ██║██████╔╝██████╔╝███████║██████╔╝ ╚████╔╝
-██║   ██║██║   ██║██║     ██║  ██║██╔══╝  ██║╚██╗██║██║     ██║██╔══██╗██╔══██╗██╔══██║██╔══██╗  ╚██╔╝  
-╚██████╔╝╚██████╔╝███████╗██████╔╝███████╗██║ ╚████║███████╗██║██████╔╝██║  ██║██║  ██║██║  ██║   ██║   
- ╚═════╝  ╚═════╝ ╚══════╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
-```
-
 **Gerenciador de biblioteca pessoal com autenticação JWT, MongoDB e foco em qualidade de software.**
 
 </div>
@@ -319,12 +309,5 @@ O arquivo `RTM.md` contém:
 # 👨‍💻 Autores
 
 Desenvolvido como projeto semestral para a disciplina de Qualidade de Software.
-
----
-
-<div align="center">
-
-Feito com Java, Spring Boot e muitos testes.
-
 </div>
 
