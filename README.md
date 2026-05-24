@@ -304,10 +304,6 @@ O arquivo `RTM.md` contém:
 | JaCoCo      | Relatório de cobertura            |
 | SonarCloud  | Relatório de qualidade            |
 
----
-
-# 👨‍💻 Autores
-
 Desenvolvido como projeto semestral para a disciplina de Qualidade de Software.
 </div>
 
