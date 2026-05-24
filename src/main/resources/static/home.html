@@ -15,6 +15,7 @@
             --text: #F0EAD6;
             --text-muted: #7A7060;
             --border: #2A2520;
+            --input-bg: #111111;
             --error: #F87171;
             --success: #6EE7B7;
         }
@@ -28,12 +29,22 @@
             min-height: 100vh;
         }
 
+        /* MODIFICADO: Header ajustado para alinhar logo, pesquisa de título e botão */
         header {
             border-bottom: 1px solid var(--border);
             padding: 2rem 4rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex: 1;
+            max-width: 700px;
         }
 
         .logo {
@@ -42,9 +53,38 @@
             font-weight: 900;
             letter-spacing: 0.05em;
             color: var(--gold);
+            text-decoration: none;
         }
 
         .logo span { color: var(--text); font-weight: 400; }
+
+        /* AJUSTADO: Container de busca por título agora fica no topo */
+        .search-container-top {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.65rem 1.2rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        .search-input:focus, .select-status-filter:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
 
         .btn-cadastrar {
             font-size: 0.85rem;
@@ -57,6 +97,7 @@
             padding: 0.65rem 1.5rem;
             border-radius: 2rem;
             transition: background-color 0.2s, transform 0.15s;
+            white-space: nowrap;
         }
 
         .btn-cadastrar:hover { background-color: var(--gold-light); transform: translateY(-1px); }
@@ -71,7 +112,7 @@
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
         }
 
         .section-title {
@@ -89,7 +130,33 @@
             text-transform: uppercase;
         }
 
+        /* ADICIONADO: Estilo do container e select para o Filtro de Status */
+        .filter-container-main {
+            margin-bottom: 2.5rem;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .select-status-filter {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.65rem 1rem;
+            outline: none;
+            width: 100%;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%237A7060' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
         .empty-state {
+            display: none;
             text-align: center;
             padding: 6rem 2rem;
             border: 1px dashed var(--border);
@@ -156,10 +223,8 @@
         .td-status {
             font-size: 0.85rem;
             font-weight: 500;
-            color: var(--gold-light);
         }
 
-        /* Cores discretas para diferenciar cada status visualmente */
         .status-want-to-read { color: var(--text-muted); }
         .status-reading { color: var(--gold-light); }
         .status-read { color: var(--success); }
@@ -281,7 +346,12 @@
 <body>
 
 <header>
-    <div class="logo">Golden<span>Library</span></div>
+    <div class="header-left">
+        <a href="/home.html" class="logo">Golden<span>Library</span></a>
+        <div class="search-container-top">
+            <input type="text" id="searchTitle" class="search-input" placeholder="Pesquisar por título..." />
+        </div>
+    </div>
     <a href="/cadastro.html" class="btn-cadastrar">+ Cadastrar Livro</a>
 </header>
 
@@ -291,10 +361,19 @@
         <span class="book-count" id="bookCount">0 livro(s) cadastrado(s)</span>
     </div>
 
+    <div class="filter-container-main">
+        <select id="filterStatus" class="select-status-filter">
+            <option value="">Todos os Status</option>
+            <option value="WANT_TO_READ">Quero Ler</option>
+            <option value="READING">Lendo</option>
+            <option value="READ">Lido</option>
+        </select>
+    </div>
+
     <div class="empty-state" id="emptyState">
         <div class="icon">📚</div>
-        <h3>Nenhum livro cadastrado</h3>
-        <p>Clique em "Cadastrar Livro" para adicionar o primeiro.</p>
+        <h3 id="emptyStateTitle">Nenhum livro cadastrado</h3>
+        <p id="emptyStateText">Clique em "Cadastrar Livro" para adicionar o primeiro.</p>
     </div>
 
     <div class="table-wrapper" id="tableWrapper">
@@ -304,7 +383,8 @@
                 <th>Título</th>
                 <th>Autor</th>
                 <th>Gênero</th>
-                <th>Status</th> <th>ID</th>
+                <th>Status</th>
+                <th>ID</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -329,6 +409,7 @@
 
 <script>
     let idParaDeletar = null;
+    let debounceTimer = null;
 
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
@@ -338,12 +419,45 @@
             return;
         }
         carregarLivros();
+
+        // Evento de digitação na Barra de Título superior (com Debounce)
+        document.getElementById('searchTitle').addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const termoBusca = e.target.value.trim();
+
+            // Reseta o filtro de status ao começar a digitar um título
+            document.getElementById('filterStatus').value = "";
+
+            debounceTimer = setTimeout(() => {
+                carregarLivros(termoBusca);
+            }, 300);
+        });
+
+        // ADICIONADO: Ouvinte de mudança para o Filtro de Status
+        document.getElementById('filterStatus').addEventListener('change', (e) => {
+            const statusSelecionado = e.target.value;
+
+            // Limpa o campo de busca por título ao escolher um filtro de status fixo
+            document.getElementById('searchTitle').value = "";
+
+            if (statusSelecionado) {
+                filtrarPorStatus(statusSelecionado);
+            } else {
+                carregarLivros(); // Se escolher "Todos os Status", recarrega tudo
+            }
+        });
     });
 
-    async function carregarLivros() {
+    // Função padrão para listagem completa ou por Título
+    async function carregarLivros(titulo = "") {
         const token = localStorage.getItem('token');
+        let url = '/books';
+        if (titulo) {
+            url += `?title=${encodeURIComponent(titulo)}`;
+        }
+
         try {
-            const res = await fetch('/books', {
+            const res = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -353,13 +467,34 @@
 
             if (res.ok) {
                 const books = await res.json();
-                renderizarLivros(books);
+                renderizarLivros(books, titulo !== "");
             } else if (res.status === 401 || res.status === 403) {
                 localStorage.removeItem('token');
                 window.location.href = '/cadastro_usuario.html';
             }
         } catch (e) {
             console.error("Erro ao carregar livros:", e);
+        }
+    }
+
+    // ADICIONADO: Faz a requisição à sua rota do backend @GepMapping("/filter")
+    async function filtrarPorStatus(status) {
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`/books/filter?status=${status}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (res.ok) {
+                const books = await res.json();
+                renderizarLivros(books, true); // Envia true para ajustar as strings de 'Nenhum resultado'
+            }
+        } catch (e) {
+            console.error("Erro ao filtrar livros por status:", e);
         }
     }
 
@@ -376,16 +511,30 @@
         }
     }
 
-    function renderizarLivros(books) {
+    function renderizarLivros(books, estaFiltrando = false) {
         const tbody = document.getElementById('tabelaLivros');
         const emptyState = document.getElementById('emptyState');
+        const emptyStateTitle = document.getElementById('emptyStateTitle');
+        const emptyStateText = document.getElementById('emptyStateText');
         const tableWrapper = document.getElementById('tableWrapper');
         const bookCount = document.getElementById('bookCount');
 
-        bookCount.textContent = `${books.length} livro(s) cadastrado(s)`;
+        if (estaFiltrando) {
+            bookCount.textContent = `${books.length} livro(s) encontrado(s)`;
+        } else {
+            bookCount.textContent = `${books.length} livro(s) cadastrado(s)`;
+        }
+
         tbody.innerHTML = '';
 
         if (books.length === 0) {
+            if (estaFiltrando) {
+                emptyStateTitle.textContent = "Nenhum livro encontrado";
+                emptyStateText.textContent = "Tente mudar os filtros aplicados ou limpe a busca.";
+            } else {
+                emptyStateTitle.textContent = "Nenhum livro cadastrado";
+                emptyStateText.textContent = "Clique em \"Cadastrar Livro\" para adicionar o primeiro.";
+            }
             emptyState.style.display = 'block';
             tableWrapper.style.display = 'none';
             return;
@@ -399,7 +548,7 @@
             tr.innerHTML = `
                 <td class="td-title">${book.title}</td>
                 <td class="td-author">${book.author}</td>
-                <td class="td-genre">${book.genre}</td>
+                <td class="td-genre">${book.genre || ''}</td>
                 <td class="td-status">${obterTextoStatus(book.status)}</td>
                 <td class="td-id">${book.id}</td>
                 <td class="td-actions">
@@ -434,6 +583,8 @@
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (res.ok) {
+                document.getElementById('searchTitle').value = "";
+                document.getElementById('filterStatus').value = "";
                 carregarLivros();
             } else {
                 alert('Erro ao excluir o livro.');
