@@ -1,13 +1,16 @@
 package br.com.goldenlibrary.goldenlibrary_api.controller;
 
 import br.com.goldenlibrary.goldenlibrary_api.MongoIntegrationTest;
+
 import br.com.goldenlibrary.goldenlibrary_api.entity.Book;
 import br.com.goldenlibrary.goldenlibrary_api.entity.User;
 import br.com.goldenlibrary.goldenlibrary_api.enums.ReadingStatus;
 import br.com.goldenlibrary.goldenlibrary_api.enums.UserRole;
 import br.com.goldenlibrary.goldenlibrary_api.repository.BookRepository;
 import br.com.goldenlibrary.goldenlibrary_api.repository.UserRepository;
+
 import br.com.goldenlibrary.goldenlibrary_api.security.CustomUserDetails;
+
 import br.com.goldenlibrary.goldenlibrary_api.service.BookService;
 import br.com.goldenlibrary.goldenlibrary_api.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,12 +55,15 @@ class BookControllerTest extends MongoIntegrationTest {
                 "Kaio", "kaio@email.com",
                 passwordEncoder.encode("senha123"), UserRole.USER));
         userId1 = user1.getId();
+
         tokenUser1 = jwtService.newToken(new CustomUserDetails(user1));
 
         User user2 = userRepository.save(new User(
                 "Other", "other@email.com",
                 passwordEncoder.encode("senha123"), UserRole.USER));
         userId2 = user2.getId();
+
+
         tokenUser2 = jwtService.newToken(new CustomUserDetails(user2));
     }
 

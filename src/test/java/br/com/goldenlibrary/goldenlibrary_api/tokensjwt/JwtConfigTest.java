@@ -1,46 +1,66 @@
 package br.com.goldenlibrary.goldenlibrary_api.tokensjwt;
 
 import br.com.goldenlibrary.goldenlibrary_api.MongoIntegrationTest;
-import br.com.goldenlibrary.goldenlibrary_api.entity.User;
-import br.com.goldenlibrary.goldenlibrary_api.enums.UserRole;
-import br.com.goldenlibrary.goldenlibrary_api.security.CustomUserDetails;
-import br.com.goldenlibrary.goldenlibrary_api.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import javax.crypto.SecretKey;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class JwtConfigTest extends MongoIntegrationTest {
 
     @Autowired
-    private JwtService jwtService;
+    private JwtConfig jwtConfig;
+
+    @Autowired
+    private SecretKey jwtSecretKey;
+
+    @Autowired
+    private JwtEncoder jwtEncoder;
+
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @Test
-    void shouldGenerateAndExtractUserFromTokenSuccessfully() {
-        User user = new User();
-        user.setId("12345");
-        user.setName("Kaio Teste");
-        user.setEmail("test@goldenlibrary.com");
-        user.setRole(UserRole.USER);
+    void shouldLoadAllBeansSuccessfullyWhenSecretIsConfigured() {
+        assertNotNull(jwtConfig);
+        assertNotNull(jwtSecretKey);
+        assertNotNull(jwtEncoder);
+        assertNotNull(jwtDecoder);
+        assertEquals("HmacSHA256", jwtSecretKey.getAlgorithm());
+    }
 
-        CustomUserDetails userDetails = new CustomUserDetails(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                null
-        );
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenSecretIsNull() {
 
-        String token = jwtService.newToken(userDetails);
-        assertNotNull(token);
+        JwtConfig configMock = new JwtConfig();
 
-        CustomUserDetails extractedUser = jwtService.getUserInToken(token);
-        assertNotNull(extractedUser);
+        ReflectionTestUtils.setField(configMock, "jwtSecretRaw", null);
 
-        assertEquals("test@goldenlibrary.com", extractedUser.getUsername());
-        assertEquals("Kaio Teste", extractedUser.getName());
-        assertEquals("12345", extractedUser.getId());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            configMock.jwtSecretKey();
+        });
+
+        assertTrue(exception.getMessage().contains("nao foi configurada"));
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenSecretIsEmptyOrBlank() {
+
+        JwtConfig configMock = new JwtConfig();
+
+        ReflectionTestUtils.setField(configMock, "jwtSecretRaw", "   ");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            configMock.jwtSecretKey();
+        });
+
+        assertTrue(exception.getMessage().contains("nao foi configurada"));
     }
 }

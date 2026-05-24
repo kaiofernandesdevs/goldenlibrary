@@ -6,7 +6,6 @@ import org.testcontainers.containers.MongoDBContainer;
 
 public abstract class MongoIntegrationTest {
 
-    // Inicialização static manual: o container sobe uma única vez para a suíte toda
     protected static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0");
 
     static {

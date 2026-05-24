@@ -103,7 +103,8 @@
             color: var(--text-muted);
         }
 
-        input {
+        /* AJUSTADO: Seletor compartilhado para manter inputs e selects idênticos */
+        input, select {
             background-color: var(--input-bg);
             border: 1px solid var(--border);
             border-radius: 6px;
@@ -116,7 +117,15 @@
             width: 100%;
         }
 
-        input:focus { border-color: var(--gold); }
+        /* AJUSTADO: Estilização da seta customizada do select */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%237A7060' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        input:focus, select:focus { border-color: var(--gold); }
         input::placeholder { color: var(--text-muted); }
 
         .btn-submit {
@@ -198,17 +207,12 @@
         <div class="form-group">
             <label for="status">Status de Leitura</label>
             <select id="status">
-                <option value="" disabled selected>Selecione o status</option>
+                <option value="" disabled>Selecione o status</option>
                 <option value="WANT_TO_READ">Quero Ler</option>
                 <option value="READING">Lendo</option>
                 <option value="READ">Lido</option>
             </select>
         </div>
-
-        <!-- <div class="form-group">
-            <label for="year">Ano de Publicação</label>
-            <input type="number" id="year" placeholder="Ex: 1899" min="1000" max="2099" />
-        </div> -->
 
         <div id="feedback" class="feedback"></div>
 
@@ -242,7 +246,8 @@
                 document.getElementById('bookId').value = book.id;
                 document.getElementById('title').value = book.title;
                 document.getElementById('author').value = book.author;
-                // document.getElementById('genre').value = book.genre;
+                document.getElementById('genre').value = book.genre || '';
+                document.getElementById('status').value = book.status || '';
             } else {
                 alert('Erro ao buscar dados do livro.');
                 window.location.href = '/home.html';
@@ -265,7 +270,7 @@
         feedback.className = 'feedback';
         feedback.textContent = '';
 
-        if (!title || !author) {
+        if (!title || !author || !genre || !status) {
             feedback.className = 'feedback error';
             feedback.textContent = 'Preencha todos os campos corretamente.';
             return;
@@ -277,7 +282,7 @@
         try {
             const res = await fetch(`/books/${id}`, {
                 method: 'PUT',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
@@ -286,7 +291,7 @@
 
             if (res.ok) {
                 feedback.className = 'feedback success';
-                feedback.textContent = 'Livro atualizado com sucesso!';
+                feedback.textContent = 'Livro editado com sucesso!';
                 setTimeout(() => window.location.href = '/home.html', 1500);
             } else {
                 feedback.className = 'feedback error';

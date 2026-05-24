@@ -37,7 +37,7 @@ public class BookController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(required = false) String title) {
 
-        String userId = userDetails.getId(); // Captura o ID do usuário injetado pelo Token JWT
+        String userId = userDetails.getId();
 
         if (title != null && !title.isBlank()) {
             return ResponseEntity.ok(bookService.searchByTitle(userId, title));

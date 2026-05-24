@@ -16,6 +16,7 @@
             --text-muted: #7A7060;
             --border: #2A2520;
             --error: #F87171;
+            --success: #6EE7B7;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -150,11 +151,18 @@
 
         .td-author { color: var(--text-muted); font-size: 0.9rem; }
 
-        .td-year {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .td-genre { color: var(--text); font-size: 0.9rem; }
+
+        .td-status {
+            font-size: 0.85rem;
+            font-weight: 500;
             color: var(--gold-light);
         }
+
+        /* Cores discretas para diferenciar cada status visualmente */
+        .status-want-to-read { color: var(--text-muted); }
+        .status-reading { color: var(--gold-light); }
+        .status-read { color: var(--success); }
 
         .td-id {
             font-family: monospace;
@@ -292,17 +300,16 @@
     <div class="table-wrapper" id="tableWrapper">
         <table>
             <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Autor</th>
-                    <!-- <th>Ano</th> -->
-                    <th>Gênero</th>
-                    <th>ID</th>
-                    <th>Ações</th>
-                </tr>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Gênero</th>
+                <th>Status</th> <th>ID</th>
+                <th>Ações</th>
+            </tr>
             </thead>
             <tbody id="tabelaLivros">
-                </tbody>
+            </tbody>
         </table>
     </div>
 </main>
@@ -322,13 +329,12 @@
 
 <script>
     let idParaDeletar = null;
-    
-    // Executa ao carregar a página
+
     document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
-        
+
         if (!token) {
-            window.location.href = '/login.html'; // Altere para sua tela de login padrão se houver uma específica
+            window.location.href = '/login.html';
             return;
         }
         carregarLivros();
@@ -357,6 +363,19 @@
         }
     }
 
+    function obterTextoStatus(status) {
+        switch(status) {
+            case 'WANT_TO_READ':
+                return '<span class="status-want-to-read">Quero Ler</span>';
+            case 'READING':
+                return '<span class="status-reading">Lendo</span>';
+            case 'READ':
+                return '<span class="status-read">Lido</span>';
+            default:
+                return `<span class="text-muted">${status || 'Não Informado'}</span>`;
+        }
+    }
+
     function renderizarLivros(books) {
         const tbody = document.getElementById('tabelaLivros');
         const emptyState = document.getElementById('emptyState');
@@ -380,7 +399,8 @@
             tr.innerHTML = `
                 <td class="td-title">${book.title}</td>
                 <td class="td-author">${book.author}</td>
-                <td class="td-year">${book.genre}</td>
+                <td class="td-genre">${book.genre}</td>
+                <td class="td-status">${obterTextoStatus(book.status)}</td>
                 <td class="td-id">${book.id}</td>
                 <td class="td-actions">
                     <div class="actions-wrap">
@@ -394,7 +414,6 @@
     }
 
     function confirmarDelete(btn) {
-        const token = localStorage.getItem('token');
         idParaDeletar = btn.getAttribute('data-id');
         const title = btn.getAttribute('data-title');
         document.getElementById('modalMsg').textContent = `Tem certeza que deseja excluir "${title}"?`;
@@ -410,7 +429,7 @@
         const token = localStorage.getItem('token');
         if (!idParaDeletar) return;
         try {
-            const res = await fetch(`/books/${idParaDeletar}`, { 
+            const res = await fetch(`/books/${idParaDeletar}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

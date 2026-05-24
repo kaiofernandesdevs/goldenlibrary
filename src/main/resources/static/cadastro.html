@@ -115,7 +115,7 @@
             transition: border-color 0.2s;
             outline: none;
             width: 100%;
-            appearance: none; /* Remove seta padrão em alguns navegadores */
+            appearance: none;
         }
 
         select {
@@ -201,18 +201,13 @@
             <input type="text" id="genre" placeholder="Ex: Romance, Suspense, Biografia" />
         </div>
 
-        <!-- <div class="form-group">
-            <label for="genre">Ano</label>
-            <input type="text" id="year" placeholder="Ex: 1900, 2026" />
-        </div> -->
-
         <div class="form-group">
             <label for="status">Status de Leitura</label>
             <select id="status">
                 <option value="" disabled selected>Selecione o status</option>
-                <option value="QUERO_LER">Quero Ler</option>
-                <option value="LENDO">Lendo</option>
-                <option value="LIDO">Lido</option>
+                <option value="WANT_TO_READ">Quero Ler</option>
+                <option value="READING">Lendo</option>
+                <option value="READ">Lido</option>
             </select>
         </div>
 
@@ -235,7 +230,6 @@
         const title    = document.getElementById('title').value.trim();
         const author   = document.getElementById('author').value.trim();
         const genre    = document.getElementById('genre').value.trim();
-        // const year    = document.getElementById('year').value.trim();
         const status   = document.getElementById('status').value;
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
@@ -244,9 +238,9 @@
         feedback.className = 'feedback';
         feedback.textContent = '';
 
-        if (!title || !author || !genre) {
+        if (!title || !author || !genre || !status) {
             feedback.className = 'feedback error';
-            feedback.textContent = 'Por favor, preencha todos os campos.';
+            feedback.textContent = 'Por favor, preencha todos os campos e selecione o status.';
             return;
         }
 
@@ -256,13 +250,18 @@
         try {
             const response = await fetch('/books', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ "userId":"2", title, author, genre, "status": "WANT_TO_READ","createdAt": "2026-05-23T05:05:09.117Z",  "updatedAt": "2026-05-23T05:05:09.117Z" })
+                body: JSON.stringify({
+                    title: title,
+                    author: author,
+                    genre: genre,
+                    status: status
+                })
             });
-            console.log(response);
+
             if (response.ok) {
                 feedback.className = 'feedback success';
                 feedback.textContent = 'Livro cadastrado com sucesso!';
