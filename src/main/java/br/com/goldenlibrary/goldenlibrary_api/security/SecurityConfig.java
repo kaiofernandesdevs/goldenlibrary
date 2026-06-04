@@ -62,8 +62,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                // Desabilita o resource server do oauth2 que conflita com nosso filtro JWT
-                // customizado
                 .oauth2ResourceServer(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -73,9 +71,9 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/*.html",        // Permite acesso a todos os ficheiros HTML
-                                "/",              // Permite acesso à raiz do site
-                                "/favicon.ico",   // Permite o ícone do navegador
+                                "/*.html",
+                                "/",
+                                "/favicon.ico",
                                 "/user/**")
                         .permitAll()
                         .requestMatchers("/user/**").permitAll()

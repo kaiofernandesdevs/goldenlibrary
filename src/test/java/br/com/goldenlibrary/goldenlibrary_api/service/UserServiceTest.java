@@ -13,11 +13,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("UserService — testes de integração com Testcontainers")
 class UserServiceTest extends MongoIntegrationTest {
 
@@ -31,7 +33,7 @@ class UserServiceTest extends MongoIntegrationTest {
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    void limparBanco() {
+    void clearDatabase() {
         userRepository.deleteAll();
     }
 
@@ -41,27 +43,27 @@ class UserServiceTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve cadastrar usuário com senha criptografada — UC-001 Fluxo 1.1")
-    void deveCadastrarUsuarioComSenhaCriptografada() {
+    void shouldRegisterUserWithEncryptedPassword() {
         RegisterRequest request = new RegisterRequest("Kaio", "kaio@email.com", "senha123");
 
-        User salvo = userService.addNewUser(request);
+        User savedUser = userService.addNewUser(request);
 
-        assertThat(salvo.getId()).isNotNull();
-        assertThat(salvo.getName()).isEqualTo("Kaio");
-        assertThat(salvo.getEmail()).isEqualTo("kaio@email.com");
+        assertThat(savedUser.getId()).isNotNull();
+        assertThat(savedUser.getName()).isEqualTo("Kaio");
+        assertThat(savedUser.getEmail()).isEqualTo("kaio@email.com");
         // Senha deve estar criptografada — nunca igual ao plain text
-        assertThat(salvo.getPassword()).isNotEqualTo("senha123");
-        assertThat(passwordEncoder.matches("senha123", salvo.getPassword())).isTrue();
+        assertThat(savedUser.getPassword()).isNotEqualTo("senha123");
+        assertThat(passwordEncoder.matches("senha123", savedUser.getPassword())).isTrue();
     }
 
     @Test
     @DisplayName("deve persistir usuário no MongoDB")
-    void devePersistirUsuarioNoBanco() {
+    void shouldPersistUserInTheDatabase() {
         RegisterRequest request = new RegisterRequest("Kaio", "kaio@email.com", "senha123");
 
-        User salvo = userService.addNewUser(request);
+        User savedUser = userService.addNewUser(request);
 
-        assertThat(userRepository.findById(salvo.getId())).isPresent();
+        assertThat(userRepository.findById(savedUser.getId())).isPresent();
     }
 
     // ═══════════════════════════════════════════════════════════════════
@@ -70,7 +72,7 @@ class UserServiceTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve lançar EmailAlreadyExistsException para e-mail duplicado — UC-001 E1")
-    void deveLancarExcecaoParaEmailDuplicado() {
+    void shouldThrowExceptionForDuplicateEmail() {
         RegisterRequest request = new RegisterRequest("Kaio", "kaio@email.com", "senha123");
         userService.addNewUser(request);
 
@@ -81,7 +83,7 @@ class UserServiceTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve aceitar e-mails diferentes para usuários distintos")
-    void deveAceitarEmailsDiferentes() {
+    void shouldAcceptDifferentEmailsForDistinctUsers() {
         userService.addNewUser(new RegisterRequest("Kaio", "kaio@email.com", "senha123"));
         userService.addNewUser(new RegisterRequest("Outro", "outro@email.com", "senha456"));
 
@@ -94,21 +96,19 @@ class UserServiceTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("deve atribuir role USER por padrão ao cadastrar")
-    void deveAtribuirRoleUserPorPadrao() {
-        User salvo = userService.addNewUser(
+    void shouldAssignDefaultUserRoleWhenRegistering() {
+        User savedUser = userService.addNewUser(
                 new RegisterRequest("Kaio", "kaio@email.com", "senha123"));
 
-        assertThat(salvo.getRole()).isNotNull();
-        assertThat(salvo.getRole().name()).isEqualTo("USER");
+        assertThat(savedUser.getRole()).isNotNull();
+        assertThat(savedUser.getRole().name()).isEqualTo("USER");
     }
-
     // ═══════════════════════════════════════════════════════════════════
     // UserRepository — queries customizadas
     // ═══════════════════════════════════════════════════════════════════
-
     @Test
     @DisplayName("existsByEmail deve retornar true para e-mail cadastrado")
-    void existsByEmailDeveRetornarTrue() {
+    void existsByEmailShouldReturnTrueForRegisteredEmail() {
         userService.addNewUser(new RegisterRequest("Kaio", "kaio@email.com", "senha123"));
 
         assertThat(userRepository.existsByEmail("kaio@email.com")).isTrue();
@@ -116,7 +116,7 @@ class UserServiceTest extends MongoIntegrationTest {
 
     @Test
     @DisplayName("existsByEmail deve retornar false para e-mail não cadastrado")
-    void existsByEmailDeveRetornarFalse() {
+    void existsByEmailShouldReturnFalseForUnregisteredEmail() {
         assertThat(userRepository.existsByEmail("naoexiste@email.com")).isFalse();
     }
 
@@ -127,10 +127,10 @@ class UserServiceTest extends MongoIntegrationTest {
             "usuario.nome@dominio.org"
     })
     @DisplayName("deve aceitar diferentes formatos de e-mail válidos")
-    void deveAceitarFormatosDeEmailValidos(String email) {
-        User salvo = userService.addNewUser(
+    void shouldAcceptDifferentValidEmailFormats(String email) {
+        User savedUser = userService.addNewUser(
                 new RegisterRequest("Usuário", email, "senha123"));
 
-        assertThat(salvo.getEmail()).isEqualTo(email);
+        assertThat(savedUser.getEmail()).isEqualTo(email);
     }
 }

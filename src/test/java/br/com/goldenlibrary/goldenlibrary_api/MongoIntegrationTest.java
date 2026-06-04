@@ -16,7 +16,5 @@ public abstract class MongoIntegrationTest {
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.mongodb.database", () -> "goldenlibrary_test");
-        registry.add("api.security.token.secret",
-                () -> "dGVzdC1zZWNyZXQta2V5LWZvci1nb2xkZW5saWJyYXJ5LXRlc3RpbmctMTIz");
     }
 }

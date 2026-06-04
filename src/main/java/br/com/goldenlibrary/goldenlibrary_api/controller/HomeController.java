@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String index() {
-        // Redireciona automaticamente a raiz (/) para a página de login estática
+    public String home() {
         return "redirect:/home.html";
     }
 }

@@ -22,14 +22,14 @@ public class UserService {
             throw new EmailAlreadyExistsException("E-mail passado já está cadastrado");
         }
 
-        User user = new User(
+        User newUser = new User(
                 request.name(),
                 request.email(),
                 passwordEncoder.encode(request.password()),
                 UserRole.USER
         );
 
-        return userRepository.save(user);
+        return userRepository.save(newUser);
     }
 
     public record RegisterRequest(String name, String email, String password) {}

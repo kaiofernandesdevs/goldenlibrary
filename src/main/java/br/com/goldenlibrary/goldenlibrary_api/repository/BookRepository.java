@@ -16,9 +16,4 @@ public interface BookRepository extends MongoRepository<Book, String> {
     List<Book> findByUserIdAndTitleContainingIgnoreCase(String userId, String title);
 
     Optional<Book> findByIdAndUserId(String id, String userId);
-
-
-
-
-
 }

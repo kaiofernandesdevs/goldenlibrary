@@ -35,7 +35,7 @@ public class JwtService {
                 .issuer("goldenlibrary")
                 .issuedAt(now)
                 .expiresAt(expiration)
-                .subject(user.getUsername())   // e-mail
+                .subject(user.getUsername())
                 .claim("name", user.getName())
                 .claim("id", user.getId())
                 .build();
@@ -60,8 +60,6 @@ public class JwtService {
             String username = jwt.getSubject();
             String name     = jwt.getClaimAsString("name");
             String id       = jwt.getClaimAsString("id");
-
-            // senha não está mais no token — passamos null (não é usada após autenticação)
             return new CustomUserDetails(id, name, username, null);
         } catch (JwtException ex) {
             throw ex;

@@ -43,12 +43,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(7);
 
         try {
-            // Extrai o e-mail do token
             CustomUserDetails tokenUser = jwtService.getUserInToken(jwt);
 
             if (tokenUser != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                // Busca o usuário real no banco pelo e-mail — garante dados completos e senha real
                 userRepository.findByEmail(tokenUser.getUsername()).ifPresent(user -> {
                     CustomUserDetails userDetails = new CustomUserDetails(user);
 
@@ -67,7 +64,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
         }
-
         filterChain.doFilter(request, response);
     }
 }
