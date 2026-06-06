@@ -202,6 +202,11 @@
         </div>
 
         <div class="form-group">
+            <label for="coverUrl">URL da Capa do Livro</label>
+            <input type="url" id="coverUrl" placeholder="Ex: https://linkimagem.com/capa.jpg">
+        </div>
+
+        <div class="form-group">
             <label for="status">Status de Leitura</label>
             <select id="status">
                 <option value="" disabled selected>Selecione o status</option>
@@ -230,6 +235,7 @@
         const title    = document.getElementById('title').value.trim();
         const author   = document.getElementById('author').value.trim();
         const genre    = document.getElementById('genre').value.trim();
+        const coverUrl = document.getElementById('coverUrl').value.trim();
         const status   = document.getElementById('status').value;
         const feedback = document.getElementById('feedback');
         const btn      = document.getElementById('btnSalvar');
@@ -238,9 +244,10 @@
         feedback.className = 'feedback';
         feedback.textContent = '';
 
+        // Mantido apenas os campos obrigatórios na validação (a URL da capa pode ser vazia/opcional)
         if (!title || !author || !genre || !status) {
             feedback.className = 'feedback error';
-            feedback.textContent = 'Por favor, preencha todos os campos e selecione o status.';
+            feedback.textContent = 'Por favor, preencha todos os campos obrigatórios e selecione o status.';
             return;
         }
 
@@ -258,6 +265,7 @@
                     title: title,
                     author: author,
                     genre: genre,
+                    coverUrl: coverUrl,
                     status: status
                 })
             });

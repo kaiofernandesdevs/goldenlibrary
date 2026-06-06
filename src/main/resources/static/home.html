@@ -1,572 +1,600 @@
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>GoldenLibrary</title>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-        <style>
-            :root {
-                --gold: #C9A84C;
-                --gold-light: #E8C97A;
-                --bg: #0D0D0D;
-                --bg-card: #141414;
-                --bg-card-hover: #1C1C1C;
-                --text: #F0EAD6;
-                --text-muted: #7A7060;
-                --border: #2A2520;
-                --input-bg: #111111;
-                --error: #F87171;
-                --success: #6EE7B7;
-            }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GoldenLibrary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C97A;
+            --bg: #0D0D0D;
+            --bg-card: #141414;
+            --bg-card-hover: #1C1C1C;
+            --text: #F0EAD6;
+            --text-muted: #7A7060;
+            --border: #2A2520;
+            --input-bg: #111111;
+            --error: #F87171;
+            --success: #6EE7B7;
+        }
 
-            * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-            body {
-                background-color: var(--bg);
-                color: var(--text);
-                font-family: 'DM Sans', sans-serif;
-                min-height: 100vh;
-            }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+        }
 
-            header {
-                border-bottom: 1px solid var(--border);
-                padding: 2rem 4rem;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 2rem;
-            }
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
 
-            .header-left {
-                display: flex;
-                align-items: center;
-                gap: 3rem;
-                flex: 1;
-                max-width: 700px;
-            }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex: 1;
+            max-width: 700px;
+        }
 
-            /* ADICIONADO: Container para alinhar os botões de ação do lado direito */
-            .header-actions {
-                display: flex;
-                align-items: center;
-                gap: 1.5rem;
-            }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
-            .logo {
-                font-family: 'Playfair Display', serif;
-                font-size: 1.8rem;
-                font-weight: 900;
-                letter-spacing: 0.05em;
-                color: var(--gold);
-                text-decoration: none;
-            }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: var(--gold);
+            text-decoration: none;
+        }
 
-            .logo span { color: var(--text); font-weight: 400; }
+        .logo span { color: var(--text); font-weight: 400; }
 
-            .search-container-top {
-                flex: 1;
-                max-width: 400px;
-            }
+        .search-container-top {
+            flex: 1;
+            max-width: 400px;
+        }
 
-            .search-input {
-                background-color: var(--input-bg);
-                border: 1px solid var(--border);
-                border-radius: 30px;
-                color: var(--text);
-                font-family: 'DM Sans', sans-serif;
-                font-size: 0.9rem;
-                padding: 0.65rem 1.2rem;
-                transition: border-color 0.2s, box-shadow 0.2s;
-                outline: none;
-                width: 100%;
-            }
+        .search-input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.65rem 1.2rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            width: 100%;
+        }
 
-            .search-input:focus, .select-status-filter:focus {
-                border-color: var(--gold);
-                box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
-            }
+        .search-input:focus, .select-status-filter:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
+        }
 
-            .search-input::placeholder {
-                color: var(--text-muted);
-            }
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
 
-            .btn-cadastrar {
-                font-size: 0.85rem;
-                font-weight: 500;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                text-decoration: none;
-                color: var(--bg);
-                background-color: var(--gold);
-                padding: 0.65rem 1.5rem;
-                border-radius: 2rem;
-                transition: background-color 0.2s, transform 0.15s;
-                white-space: nowrap;
-            }
+        .btn-cadastrar {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--bg);
+            background-color: var(--gold);
+            padding: 0.65rem 1.5rem;
+            border-radius: 2rem;
+            transition: background-color 0.2s, transform 0.15s;
+            white-space: nowrap;
+        }
 
-            .btn-cadastrar:hover { background-color: var(--gold-light); transform: translateY(-1px); }
+        .btn-cadastrar:hover { background-color: var(--gold-light); transform: translateY(-1px); }
 
-            /* ADICIONADO: Estilo do botão de Sair minimalista */
-            .btn-logout {
-                background: none;
-                border: none;
-                color: var(--text-muted);
-                font-family: 'DM Sans', sans-serif;
-                font-size: 0.85rem;
-                font-weight: 500;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                cursor: pointer;
-                transition: color 0.2s;
-                padding: 0.5rem 0.75rem;
-            }
+        .btn-logout {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0.5rem 0.75rem;
+        }
 
-            .btn-logout:hover {
-                color: var(--error);
-            }
+        .btn-logout:hover { color: var(--error); }
 
-            main {
-                max-width: 1100px;
-                margin: 0 auto;
-                padding: 4rem 2rem;
-            }
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
 
-            .section-header {
-                display: flex;
-                align-items: flex-end;
-                justify-content: space-between;
-                margin-bottom: 1.5rem;
-            }
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
 
-            .section-title {
-                font-family: 'Playfair Display', serif;
-                font-size: 2.5rem;
-                font-weight: 700;
-            }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
 
-            .section-title em { color: var(--gold); font-style: italic; }
+        .section-title em { color: var(--gold); font-style: italic; }
 
-            .book-count {
-                font-size: 0.85rem;
-                color: var(--text-muted);
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-            }
+        .book-count {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
 
-            .filter-container-main {
-                margin-bottom: 2.5rem;
-                width: 100%;
-                max-width: 250px;
-            }
+        .filter-container-main {
+            margin-bottom: 2.5rem;
+            width: 100%;
+            max-width: 250px;
+        }
 
-            .select-status-filter {
-                background-color: var(--input-bg);
-                border: 1px solid var(--border);
-                border-radius: 6px;
-                color: var(--text);
-                font-family: 'DM Sans', sans-serif;
-                font-size: 0.9rem;
-                padding: 0.65rem 1rem;
-                outline: none;
-                width: 100%;
-                cursor: pointer;
-                transition: border-color 0.2s;
-                appearance: none;
-                background-image: url("data:image/svg+xml;utf8,<svg fill='%237A7060' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-                background-repeat: no-repeat;
-                background-position: right 1rem center;
-            }
+        .select-status-filter {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.65rem 1rem;
+            outline: none;
+            width: 100%;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%237A7060' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
 
-            .empty-state {
-                display: none;
-                text-align: center;
-                padding: 6rem 2rem;
-                border: 1px dashed var(--border);
-                border-radius: 8px;
-            }
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 6rem 2rem;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+        }
 
-            .empty-state .icon { font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.4; }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.4; }
 
-            .empty-state h3 {
-                font-family: 'Playfair Display', serif;
-                font-size: 1.4rem;
-                color: var(--text-muted);
-                margin-bottom: 0.5rem;
-            }
+        .empty-state h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
 
-            .empty-state p { font-size: 0.9rem; color: var(--text-muted); }
+        .empty-state p { font-size: 0.9rem; color: var(--text-muted); }
 
-            .table-wrapper {
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                overflow: hidden;
-                animation: fadeInUp 0.4s ease both;
-            }
+        .table-wrapper {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            animation: fadeInUp 0.4s ease both;
+        }
 
-            table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; }
 
-            thead {
-                background-color: var(--bg-card);
-                border-bottom: 1px solid var(--border);
-            }
+        thead {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+        }
 
-            thead th {
-                padding: 1rem 1.5rem;
-                text-align: left;
-                font-size: 0.7rem;
-                font-weight: 500;
-                letter-spacing: 0.15em;
-                text-transform: uppercase;
-                color: var(--text-muted);
-            }
+        thead th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
 
-            thead th:last-child { text-align: center; }
+        thead th:last-child { text-align: center; }
 
-            tbody tr {
-                border-bottom: 1px solid var(--border);
-                transition: background-color 0.15s;
-                animation: fadeInUp 0.3s ease both;
-            }
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.15s;
+            animation: fadeInUp 0.3s ease both;
+        }
 
-            tbody tr:last-child { border-bottom: none; }
-            tbody tr:hover { background-color: var(--bg-card-hover); }
-            tbody td { padding: 1.2rem 1.5rem; font-size: 0.95rem; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background-color: var(--bg-card-hover); }
+        tbody td { padding: 1.2rem 1.5rem; font-size: 0.95rem; vertical-align: middle; }
 
-            .td-title {
-                font-family: 'Playfair Display', serif;
-                font-size: 1rem;
-                font-weight: 700;
-            }
+        .td-title-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-            .td-author { color: var(--text-muted); font-size: 0.9rem; }
+        .cover-wrapper {
+            width: 48px;
+            height: 64px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
 
-            .td-genre { color: var(--text); font-size: 0.9rem; }
+        .cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-            .td-status {
-                font-size: 0.85rem;
-                font-weight: 500;
-            }
+        .cover-placeholder {
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
 
-            .status-want-to-read { color: var(--text-muted); }
-            .status-reading { color: var(--gold-light); }
-            .status-read { color: var(--success); }
+        .td-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
 
-            .td-actions { text-align: center; }
-            .actions-wrap { display: flex; gap: 0.5rem; justify-content: center; }
+        .td-author { color: var(--text-muted); font-size: 0.9rem; }
+        .td-genre { color: var(--text); font-size: 0.9rem; }
+        .td-status { font-size: 0.85rem; font-weight: 500; }
 
-            .btn-edit, .btn-delete {
-                font-size: 0.75rem;
-                font-weight: 500;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                border: none;
-                padding: 0.4rem 0.9rem;
-                border-radius: 2rem;
-                cursor: pointer;
-                transition: opacity 0.2s, transform 0.15s;
-                text-decoration: none;
-                display: inline-block;
-            }
+        .status-want-to-read { color: var(--text-muted); }
+        .status-reading { color: var(--gold-light); }
+        .status-read { color: var(--success); }
 
-            .btn-edit {
-                background: rgba(201,168,76,.15);
-                color: var(--gold-light);
-                border: 1px solid rgba(201,168,76,.3);
-            }
+        .td-actions { text-align: center; }
+        .actions-wrap { display: flex; gap: 0.5rem; justify-content: center; }
 
-            .btn-edit:hover { opacity: 0.8; transform: translateY(-1px); }
+        .btn-edit, .btn-delete {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            text-decoration: none;
+            display: inline-block;
+        }
 
-            .btn-delete {
-                background: rgba(248,113,113,.1);
-                color: var(--error);
-                border: 1px solid rgba(248,113,113,.25);
-            }
+        .btn-edit {
+            background: rgba(201,168,76,.15);
+            color: var(--gold-light);
+            border: 1px solid rgba(201,168,76,.3);
+        }
 
-            .btn-delete:hover { opacity: 0.8; transform: translateY(-1px); }
+        .btn-edit:hover { opacity: 0.8; transform: translateY(-1px); }
 
-            /* Modal */
-            .modal-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0,0,0,0.7);
-                z-index: 100;
-                align-items: center;
-                justify-content: center;
-            }
+        .btn-delete {
+            background: rgba(248,113,113,.1);
+            color: var(--error);
+            border: 1px solid rgba(248,113,113,.25);
+        }
 
-            .modal-overlay.active { display: flex; }
+        .btn-delete:hover { opacity: 0.8; transform: translateY(-1px); }
 
-            .modal {
-                background: var(--bg-card);
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                padding: 2rem;
-                max-width: 400px;
-                width: 90%;
-                animation: fadeInUp 0.25s ease both;
-            }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
 
-            .modal h3 {
-                font-family: 'Playfair Display', serif;
-                font-size: 1.3rem;
-                margin-bottom: 0.75rem;
-            }
+        .modal-overlay.active { display: flex; }
 
-            .modal p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeInUp 0.25s ease both;
+        }
 
-            .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+        .modal h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
 
-            .btn-cancelar {
-                font-size: 0.85rem;
-                padding: 0.6rem 1.2rem;
-                border-radius: 2rem;
-                border: 1px solid var(--border);
-                background: transparent;
-                color: var(--text-muted);
-                cursor: pointer;
-                transition: color 0.2s, border-color 0.2s;
-            }
+        .modal p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
 
-            .btn-cancelar:hover { color: var(--text); border-color: var(--text-muted); }
+        .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
 
-            .btn-confirmar {
-                font-size: 0.85rem;
-                padding: 0.6rem 1.2rem;
-                border-radius: 2rem;
-                border: none;
-                background: var(--error);
-                color: #fff;
-                cursor: pointer;
-                transition: opacity 0.2s;
-            }
+        .btn-cancelar {
+            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
 
-            .btn-confirmar:hover { opacity: 0.85; }
+        .btn-cancelar:hover { color: var(--text); border-color: var(--text-muted); }
 
-            footer {
-                text-align: center;
-                padding: 2rem;
-                font-size: 0.8rem;
-                color: var(--text-muted);
-                border-top: 1px solid var(--border);
-                margin-top: 4rem;
-                letter-spacing: 0.08em;
-            }
+        .btn-confirmar {
+            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: none;
+            background: var(--error);
+            color: #fff;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
 
-            @keyframes fadeInUp {
-                from { opacity: 0; transform: translateY(16px); }
-                to   { opacity: 1; transform: translateY(0); }
-            }
-        </style>
-    </head>
-    <body>
+        .btn-confirmar:hover { opacity: 0.85; }
 
-    <header>
-        <div class="header-left">
-            <a href="/home.html" class="logo">Golden<span>Library</span></a>
-            <div class="search-container-top">
-                <input type="text" id="searchTitle" class="search-input" placeholder="Pesquisar por título..." />
-            </div>
-        </div>
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+            letter-spacing: 0.08em;
+        }
 
-        <div class="header-actions">
-            <a href="/cadastro.html" class="btn-cadastrar">+ Cadastrar Livro</a>
-            <button id="btnLogout" class="btn-logout">Sair</button>
-        </div>
-    </header>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
 
-    <main>
-        <div class="section-header">
-            <h1 class="section-title">Nosso <em>Acervo</em></h1>
-            <span class="book-count" id="bookCount">0 livro(s) cadastrado(s)</span>
-        </div>
-
-        <div class="filter-container-main">
-            <select id="filterStatus" class="select-status-filter">
-                <option value="">Todos os Status</option>
-                <option value="WANT_TO_READ">Quero Ler</option>
-                <option value="READING">Lendo</option>
-                <option value="READ">Lido</option>
-            </select>
-        </div>
-
-        <div class="empty-state" id="emptyState">
-            <div class="icon">📚</div>
-            <h3 id="emptyStateTitle">Nenhum livro cadastrado</h3>
-            <p id="emptyStateText">Clique em "Cadastrar Livro" para adicionar o primeiro.</p>
-        </div>
-
-        <div class="table-wrapper" id="tableWrapper">
-            <table>
-                <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Autor</th>
-                    <th>Gênero</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody id="tabelaLivros">
-                </tbody>
-            </table>
-        </div>
-    </main>
-
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-            <h3>Confirmar exclusão</h3>
-            <p id="modalMsg">Tem certeza que deseja excluir este livro?</p>
-            <div class="modal-actions">
-                <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-                <button class="btn-confirmar" id="btnConfirmar">Excluir</button>
-            </div>
+<header>
+    <div class="header-left">
+        <a href="/home.html" class="logo">Golden<span>Library</span></a>
+        <div class="search-container-top">
+            <input type="text" id="searchTitle" class="search-input" placeholder="Pesquisar por título..." />
         </div>
     </div>
 
-    <footer>GoldenLibrary &mdash; Sistema de Gerenciamento de Acervo</footer>
+    <div class="header-actions">
+        <a href="/cadastro.html" class="btn-cadastrar">+ Cadastrar Livro</a>
+        <button id="btnLogout" class="btn-logout">Sair</button>
+    </div>
+</header>
 
-    <script>
-        let idParaDeletar = null;
-        let debounceTimer = null;
+<main>
+    <div class="section-header">
+        <h1 class="section-title">Meu <em>Acervo</em></h1>
+        <span class="book-count" id="bookCount">0 livro(s) cadastrado(s)</span>
+    </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('token');
+    <div class="filter-container-main">
+        <select id="filterStatus" class="select-status-filter">
+            <option value="">Todos os Status</option>
+            <option value="WANT_TO_READ">Quero Ler</option>
+            <option value="READING">Lendo</option>
+            <option value="READ">Lido</option>
+        </select>
+    </div>
 
-            if (!token) {
-                window.location.href = '/login.html';
-                return;
-            }
-            carregarLivros();
+    <div class="empty-state" id="emptyState">
+        <div class="icon">📚</div>
+        <h3 id="emptyStateTitle">Nenhum livro cadastrado</h3>
+        <p id="emptyStateText">Clique em "Cadastrar Livro" para adicionar o primeiro.</p>
+    </div>
 
-            document.getElementById('searchTitle').addEventListener('input', (e) => {
-                clearTimeout(debounceTimer);
-                const termoBusca = e.target.value.trim();
-                document.getElementById('filterStatus').value = "";
+    <div class="table-wrapper" id="tableWrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Gênero</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaLivros">
+            </tbody>
+        </table>
+    </div>
+</main>
 
-                debounceTimer = setTimeout(() => {
-                    carregarLivros(termoBusca);
-                }, 300);
-            });
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h3>Confirmar exclusão</h3>
+        <p id="modalMsg">Tem certeza que deseja excluir este livro?</p>
+        <div class="modal-actions">
+            <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+            <button class="btn-confirmar" id="btnConfirmar">Excluir</button>
+        </div>
+    </div>
+</div>
 
-            document.getElementById('filterStatus').addEventListener('change', (e) => {
-                const statusSelecionado = e.target.value;
-                document.getElementById('searchTitle').value = "";
+<footer>GoldenLibrary &mdash; Sistema de Gerenciamento de Acervo</footer>
 
-                if (statusSelecionado) {
-                    filtrarPorStatus(statusSelecionado);
-                } else {
-                    carregarLivros();
-                }
-            });
+<script>
+    let idParaDeletar = null;
+    let debounceTimer = null;
 
-            // ADICIONADO: Evento de clique para o botão de Logout
-            document.getElementById('btnLogout').addEventListener('click', () => {
-                // Remove o token JWT do armazenamento local
-                localStorage.removeItem('token');
-                // Redireciona imediatamente para a página de login
-                window.location.href = '/login.html';
-            });
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+        carregarLivros();
+
+        document.getElementById('searchTitle').addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const termoBusca = e.target.value.trim();
+            document.getElementById('filterStatus').value = "";
+
+            debounceTimer = setTimeout(() => {
+                carregarLivros(termoBusca);
+            }, 300);
         });
 
-        async function carregarLivros(titulo = "") {
-            const token = localStorage.getItem('token');
-            let url = '/books';
-            if (titulo) {
-                url += `?title=${encodeURIComponent(titulo)}`;
-            }
+        document.getElementById('filterStatus').addEventListener('change', (e) => {
+            const statusSelecionado = e.target.value;
+            document.getElementById('searchTitle').value = "";
 
-            try {
-                const res = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (res.ok) {
-                    const books = await res.json();
-                    renderizarLivros(books, titulo !== "");
-                } else if (res.status === 401 || res.status === 403) {
-                    localStorage.removeItem('token');
-                    window.location.href = '/login.html'; // Corrigido para mandar para o login padrão se expirar
-                }
-            } catch (e) {
-                console.error("Erro ao carregar livros:", e);
-            }
-        }
-
-        async function filtrarPorStatus(status) {
-            const token = localStorage.getItem('token');
-            try {
-                const res = await fetch(`/books/filter?status=${status}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (res.ok) {
-                    const books = await res.json();
-                    renderizarLivros(books, true);
-                }
-            } catch (e) {
-                console.error("Erro ao filtrar livros por status:", e);
-            }
-        }
-
-        function obterTextoStatus(status) {
-            switch(status) {
-                case 'WANT_TO_READ':
-                    return '<span class="status-want-to-read">Quero Ler</span>';
-                case 'READING':
-                    return '<span class="status-reading">Lendo</span>';
-                case 'READ':
-                    return '<span class="status-read">Lido</span>';
-                default:
-                    return `<span class="text-muted">${status || 'Não Informado'}</span>`;
-            }
-        }
-
-        function renderizarLivros(books, estaFiltrando = false) {
-            const tbody = document.getElementById('tabelaLivros');
-            const emptyState = document.getElementById('emptyState');
-            const emptyStateTitle = document.getElementById('emptyStateTitle');
-            const emptyStateText = document.getElementById('emptyStateText');
-            const tableWrapper = document.getElementById('tableWrapper');
-            const bookCount = document.getElementById('bookCount');
-
-            if (estaFiltrando) {
-                bookCount.textContent = `${books.length} livro(s) encontrado(s)`;
+            if (statusSelecionado) {
+                filtrarPorStatus(statusSelecionado);
             } else {
-                bookCount.textContent = `${books.length} livro(s) cadastrado(s)`;
+                carregarLivros();
             }
+        });
 
-            tbody.innerHTML = '';
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = '/login.html';
+        });
+    });
 
-            if (books.length === 0) {
-                if (estaFiltrando) {
-                    emptyStateTitle.textContent = "Nenhum livro encontrado";
-                    emptyStateText.textContent = "Tente mudar os filtros aplicados ou limpe a busca.";
-                } else {
-                    emptyStateTitle.textContent = "Nenhum livro cadastrado";
-                    emptyStateText.textContent = "Clique em \"Cadastrar Livro\" para adicionar o primeiro.";
+    async function carregarLivros(titulo = "") {
+        const token = localStorage.getItem('token');
+        let url = '/books';
+        if (titulo) {
+            url += `?title=${encodeURIComponent(titulo)}`;
+        }
+
+        try {
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
-                emptyState.style.display = 'block';
-                tableWrapper.style.display = 'none';
-                return;
+            });
+
+            if (res.ok) {
+                const books = await res.json();
+                renderizarLivros(books, titulo !== "");
+            } else if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('token');
+                window.location.href = '/login.html';
             }
+        } catch (e) {
+            console.error("Erro ao carregar livros:", e);
+        }
+    }
 
-            emptyState.style.display = 'none';
-            tableWrapper.style.display = 'block';
+    async function filtrarPorStatus(status) {
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`/books/filter?status=${status}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-            books.forEach(book => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                <td class="td-title">${book.title}</td>
+            if (res.ok) {
+                const books = await res.json();
+                renderizarLivros(books, true);
+            }
+        } catch (e) {
+            console.error("Erro ao filtrar livros por status:", e);
+        }
+    }
+
+    function obterTextoStatus(status) {
+        switch(status) {
+            case 'WANT_TO_READ':
+                return '<span class="status-want-to-read">Quero Ler</span>';
+            case 'READING':
+                return '<span class="status-reading">Lendo</span>';
+            case 'READ':
+                return '<span class="status-read">Lido</span>';
+            default:
+                return `<span class="text-muted">${status || 'Não Informado'}</span>`;
+        }
+    }
+
+    function renderizarLivros(books, estaFiltrando = false) {
+        const tbody = document.getElementById('tabelaLivros');
+        const emptyState = document.getElementById('emptyState');
+        const emptyStateTitle = document.getElementById('emptyStateTitle');
+        const emptyStateText = document.getElementById('emptyStateText');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const bookCount = document.getElementById('bookCount');
+
+        if (estaFiltrando) {
+            bookCount.textContent = `${books.length} livro(s) encontrado(s)`;
+        } else {
+            bookCount.textContent = `${books.length} livro(s) cadastrado(s)`;
+        }
+
+        tbody.innerHTML = '';
+
+        if (books.length === 0) {
+            if (estaFiltrando) {
+                emptyStateTitle.textContent = "Nenhum livro encontrado";
+                emptyStateText.textContent = "Tente mudar os filtros aplicados ou limpe a busca.";
+            } else {
+                emptyStateTitle.textContent = "Nenhum livro cadastrado";
+                emptyStateText.textContent = "Clique em \"Cadastrar Livro\" para adicionar o primeiro.";
+            }
+            emptyState.style.display = 'block';
+            tableWrapper.style.display = 'none';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        tableWrapper.style.display = 'block';
+
+        books.forEach(book => {
+            const tr = document.createElement('tr');
+
+            const coverHtml = book.coverUrl
+                ? `<img src="${book.coverUrl}" class="cover-img" alt="Capa de ${book.title}" onerror="this.parentElement.innerHTML='<span class=\'cover-placeholder\'>📚</span>'">`
+                : `<span class="cover-placeholder">📚</span>`;
+            tr.innerHTML = `
+                <td>
+                    <div class="td-title-container">
+                        <div class="cover-wrapper">
+                            ${coverHtml}
+                        </div>
+                        <span class="td-title">${book.title}</span>
+                    </div>
+                </td>
                 <td class="td-author">${book.author}</td>
                 <td class="td-genre">${book.genre || ''}</td>
                 <td class="td-status">${obterTextoStatus(book.status)}</td>
@@ -577,43 +605,43 @@
                     </div>
                 </td>
             `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function confirmarDelete(btn) {
-            idParaDeletar = btn.getAttribute('data-id');
-            const title = btn.getAttribute('data-title');
-            document.getElementById('modalMsg').textContent = `Tem certeza que deseja excluir "${title}"?`;
-            document.getElementById('modalOverlay').classList.add('active');
-        }
-
-        function fecharModal() {
-            idParaDeletar = null;
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        document.getElementById('btnConfirmar').addEventListener('click', async () => {
-            const token = localStorage.getItem('token');
-            if (!idParaDeletar) return;
-            try {
-                const res = await fetch(`/books/${idParaDeletar}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    document.getElementById('searchTitle').value = "";
-                    document.getElementById('filterStatus').value = "";
-                    carregarLivros();
-                } else {
-                    alert('Erro ao excluir o livro.');
-                }
-            } catch (e) {
-                alert('Erro de conexão.');
-            } finally {
-                fecharModal();
-            }
+            tbody.appendChild(tr);
         });
-    </script>
-    </body>
-    </html>
+    }
+
+    function confirmarDelete(btn) {
+        idParaDeletar = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title');
+        document.getElementById('modalMsg').textContent = `Tem certeza que deseja excluir "${title}"?`;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function fecharModal() {
+        idParaDeletar = null;
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    document.getElementById('btnConfirmar').addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
+        if (!idParaDeletar) return;
+        try {
+            const res = await fetch(`/books/${idParaDeletar}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                document.getElementById('searchTitle').value = "";
+                document.getElementById('filterStatus').value = "";
+                carregarLivros();
+            } else {
+                alert('Erro ao excluir o livro.');
+            }
+        } catch (e) {
+            alert('Erro de conexão.');
+        } finally {
+            fecharModal();
+        }
+    });
+</script>
+</body>
+</html>

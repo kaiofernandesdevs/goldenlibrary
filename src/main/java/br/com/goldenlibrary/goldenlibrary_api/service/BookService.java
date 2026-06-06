@@ -45,6 +45,7 @@
                         book.setTitle(newData.getTitle());
                         book.setAuthor(newData.getAuthor());
                         book.setGenre(newData.getGenre());
+                        book.setCoverUrl(newData.getCoverUrl());
                         book.setStatus(newData.getStatus());
                         book.setUpdatedAt(LocalDateTime.now());
                         return bookRepository.save(book);

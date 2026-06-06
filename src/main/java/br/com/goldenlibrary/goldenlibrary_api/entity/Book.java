@@ -25,6 +25,8 @@
         @NotBlank(message = "Gênero é obrigatorio")
         private String genre;
 
+        private String coverUrl;
+
         // @NotNull(message = "Ano de lançamento")
         // private String year;
 
@@ -39,14 +41,22 @@
             this.createdAt = LocalDateTime.now();
             this.updatedAt = LocalDateTime.now();
         }
-        
-        public Book(String id, String userId, String title, String author, String genre,ReadingStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+
+        public String getCoverUrl() {
+            return coverUrl;
+        }
+
+        public void setCoverUrl(String coverUrl) {
+            this.coverUrl = coverUrl;
+        }
+
+        public Book(String id, String userId, String title, String author, String genre, String coverUrl, ReadingStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
             this.id = id;
             this.userId = userId;
             this.title = title;
             this.author = author;
             this.genre = genre;
-            // this.year = year;
+            this.coverUrl = coverUrl;
             this.status = status;
             this.createdAt = createdAt;
             this.updatedAt = updatedAt;
