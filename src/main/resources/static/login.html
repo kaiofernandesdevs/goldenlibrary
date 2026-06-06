@@ -225,7 +225,6 @@
 </main>
 
 <script>
-    // Limpa o token atual ao carregar a página de login por segurança
     document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('token');
     });
@@ -257,7 +256,6 @@
 
             if (response.ok) {
                 const data = await response.json();
-                alert(response)
                 if (data.token) {
                     localStorage.setItem('token', data.token);
                     feedback.className = 'feedback success';
