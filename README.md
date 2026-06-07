@@ -2,11 +2,6 @@
 
 <div align="center">
 **Gerenciador de biblioteca pessoal com autenticação JWT, MongoDB e foco estrito em qualidade de software.**
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kaiofernandesdevs_goldenlibrary&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kaiofernandesdevs_goldenlibrary)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kaiofernandesdevs_goldenlibrary&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kaiofernandesdevs_goldenlibrary)
-</div>
-
 ---
 
 # 📖 Sobre o Projeto
