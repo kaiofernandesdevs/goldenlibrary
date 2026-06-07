@@ -393,11 +393,17 @@ Benefícios:
 
 ---
 
-# 👨‍💻 Desenvolvedor
+# 👨‍💻 Desenvolvedores
 
 **Kaio Fernandes**
 
 * GitHub: https://github.com/kaiofernandesdevs
+
+**Celso Alves**
+
+*  Github: https://github.com/CelsoAlves935 *
+  
+
 
 ---
 
