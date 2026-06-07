@@ -1,161 +1,421 @@
 # 📚 GoldenLibrary
 
 <div align="center">
-**Gerenciador de biblioteca pessoal com autenticação JWT, MongoDB e foco estrito em qualidade de software.**
+
+# 📚 GoldenLibrary
+
+**Gerenciador de biblioteca pessoal com autenticação JWT, MongoDB e foco em Qualidade de Software.**
+
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.5-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-darkgreen)
+![JWT](https://img.shields.io/badge/JWT-Authentication-blue)
+![Coverage](https://img.shields.io/badge/Coverage-80%25-brightgreen)
+![License](https://img.shields.io/badge/License-Academic-lightgrey)
+
+</div>
+
 ---
 
 # 📖 Sobre o Projeto
 
-O **GoldenLibrary** é uma aplicação completa para cadastro e gerenciamento de livros de uma biblioteca pessoal, dividida num ecossistema robusto com backend em Java/Spring Boot e um frontend responsivo em Vanilla JavaScript e CSS moderno.
+O **GoldenLibrary** é uma aplicação completa para cadastro e gerenciamento de livros de uma biblioteca pessoal, composta por um backend desenvolvido com **Java/Spring Boot** e um frontend responsivo utilizando **HTML, CSS e JavaScript puro**.
 
-Desenvolvido como projeto prático semestral para a disciplina de **Qualidade de Software**, o projeto foca em:
-* **Arquitetura em Camadas:** Divisão clara entre Controller, Service, Repository e Entity (padrão MVC).
-* **Segurança Avançada:** Isolamento total de dados por utilizador baseado no ID contido no token JWT.
-* **Testabilidade Estrita:** Proibição do uso de dublês de teste (*Mocks*) em benefício de infraestrutura real em containers.
-* **Garantia de Cobertura:** Cobertura mínima de código de 80% auditada via JaCoCo e SonarCloud.
+Desenvolvido como projeto semestral da disciplina de **Qualidade de Software**, o sistema foi construído com foco em boas práticas de engenharia de software, segurança, testes automatizados e cobertura de código.
+
+## 🎯 Objetivos do Projeto
+
+* Arquitetura em camadas (MVC)
+* Segurança baseada em JWT
+* Isolamento de dados por usuário
+* Testes automatizados sem uso de mocks
+* Cobertura mínima de 80%
+* Integração contínua com GitHub Actions
+* Análise estática com SonarCloud
 
 ---
 
-# 🛠 Stack Tecnológica
+# 🛠️ Stack Tecnológica
 
-* **Backend:** Java 21, Spring Boot 3.4.5, Spring Security, JWT (Json Web Token), MongoDB, Spring Data MongoDB, Jakarta Bean Validation e Swagger/OpenAPI 3.
-* **Frontend:** HTML5, CSS3 Moderno, Vanilla JavaScript (ES6+ assíncrono com `fetch`) e armazenamento local via `localStorage`. Incorpora renderização dinâmica de capas com fallback visual automático (`📚`) para URLs inválidas.
-* **Qualidade & Testes:** JUnit 5, Testcontainers (instâncias reais de MongoDB em Docker), MockMvc, JaCoCo e SonarCloud.
-* **DevOps & CI:** GitHub Actions e Docker.
+## Backend
+
+* Java 21
+* Spring Boot 3.4.5
+* Spring Security
+* JWT (JSON Web Token)
+* MongoDB
+* Spring Data MongoDB
+* Jakarta Bean Validation
+* Swagger / OpenAPI 3
+
+## Frontend
+
+* HTML5
+* CSS3
+* JavaScript ES6+
+* Fetch API
+* LocalStorage
+
+### Recursos do Frontend
+
+* Renderização dinâmica de livros
+* Busca em tempo real
+* Filtros por status de leitura
+* Capas personalizadas por URL
+* Fallback automático para imagens inválidas
 
 ---
 
 # ✨ Funcionalidades
 
-| Funcionalidade            | Descrição                                                                          |
-| ------------------------- | ---------------------------------------------------------------------------------- |
-| 🔐 Cadastro de Usuários   | Criação de contas com criptografia de senha via BCrypt (Spring Security).          |
-| 🔑 Login via JWT          | Autenticação segura gerando tokens Bearer com tempo de expiração definido.         |
-| 📚 Gestão de Acervo (CRUD)| Criar, ler, atualizar e remover livros de forma individualizada.                    |
-| 🖼️ Capas Personalizadas    | Suporte à inserção e exibição de capas dos livros via URL dinâmica.                |
-| 🔍 Busca em Tempo Real    | Barra de pesquisa por título com filtragem case-insensitive.                       |
-| 📖 Filtros de Leitura     | Segmentação rápida do acervo por status (`WANT_TO_READ`, `READING` e `READ`).       |
-| 👤 Isolamento Multitenant | Garantia estrita de que um utilizador autenticado apenas acede aos seus próprios livros. |
-| ✅ Validação Restritiva   | Captura automatizada de campos vazios ou inválidos com feedbacks em tempo real.    |
+| Funcionalidade           | Descrição                                          |
+| ------------------------ | -------------------------------------------------- |
+| 🔐 Cadastro de Usuários  | Registro de novos usuários com criptografia BCrypt |
+| 🔑 Login JWT             | Autenticação segura baseada em token               |
+| 📚 CRUD de Livros        | Cadastro, consulta, edição e remoção               |
+| 🖼️ Capas Personalizadas | Exibição de capas via URL                          |
+| 🔍 Busca em Tempo Real   | Pesquisa por título                                |
+| 📖 Filtros de Leitura    | WANT_TO_READ, READING e READ                       |
+| 👤 Isolamento de Dados   | Cada usuário acessa apenas seus livros             |
+| ✅ Validações             | Validação automática de entradas                   |
 
 ---
 
-# 🏗 Arquitetura do Projeto
+# 🏗️ Arquitetura do Projeto
 
 ```text
 src/
 ├── main/
 │   ├── java/.../goldenlibrary_api/
-│   │   ├── controller/      # Endpoints REST e validação HTTP
-│   │   ├── service/         # Regras de negócio e isolamento de utilizadores
-│   │   ├── repository/      # Interfaces de persistência (MongoRepository)
-│   │   ├── entity/          # Documentos do MongoDB (User, Book)
-│   │   ├── enums/           # Constantes de domínio (ReadingStatus)
-│   │   ├── security/        # Configurações do Spring Security e filtros
-│   │   └── tokensjwt/       # Geração e validação do token JWT
+│   │   ├── controller/
+│   │   ├── service/
+│   │   ├── repository/
+│   │   ├── entity/
+│   │   ├── enums/
+│   │   ├── security/
+│   │   └── tokensjwt/
 │   └── resources/
-│       ├── static/          # Frontend integrado (home.html, cadastro.html, editar.html, login.html)
-│       └── application.properties  # Configurações do Spring Boot
+│       ├── static/
+│       └── application.properties
+│
 └── test/
     └── java/.../goldenlibrary_api/
-        ├── controller/      # Testes de API caixa-preta baseados em requisições MockMvc
-        ├── service/         # Testes caixa-branca focados nas regras de negócio com banco real
-        └── MongoIntegrationTest.java # Configuração base do Testcontainers para MongoDB
+        ├── controller/
+        ├── service/
+        └── MongoIntegrationTest.java
+```
 
-🚀 Como Executar Localmente
-Pré-requisitos
+### Organização das Camadas
 
-    Java Development Kit (JDK) 21
+| Camada     | Responsabilidade     |
+| ---------- | -------------------- |
+| Controller | Endpoints REST       |
+| Service    | Regras de negócio    |
+| Repository | Persistência MongoDB |
+| Entity     | Modelos de dados     |
+| Security   | JWT e autenticação   |
+| Test       | Testes automatizados |
 
-    Maven 3.9+ (ou utilização do wrapper ./mvnw incluso)
+---
 
-    Docker Desktop ativo (obrigatório para a execução dos testes)
+# 🚀 Como Executar Localmente
 
-    MongoDB ativo localmente (porta 27017) ou string de conexão do MongoDB Atlas.
+## Pré-requisitos
 
-Passo a Passo
-1. Clonar o repositório
+* JDK 21
+* Maven 3.9+
+* Docker Desktop
+* MongoDB Local ou MongoDB Atlas
 
-git clone [https://github.com/kaiofernandesdevs/goldenlibrary.git](https://github.com/kaiofernandesdevs/goldenlibrary.git)
+---
+
+## 1️⃣ Clonar o Repositório
+
+```bash
+git clone https://github.com/kaiofernandesdevs/goldenlibrary.git
+
 cd goldenlibrary
+
 git checkout dev
+```
 
-2. Configurar Variáveis de Ambiente
+---
 
-Configure as variáveis no seu ambiente ou num ficheiro .env na raiz do projeto:
+## 2️⃣ Configurar Variáveis de Ambiente
 
-NGO_URI=mongodb://localhost:27017
+Crie um arquivo `.env` ou configure as variáveis no sistema:
+
+```env
+MONGO_URI=mongodb://localhost:27017
 DB_NAME=goldenlibrary
-JWT_SECRET=sua-chave-secreta-com-no-minimo-32-caracteres-e-totalmente-segura
+JWT_SECRET=sua-chave-secreta-com-no-minimo-32-caracteres
+```
 
-3. Executar o Backend
+---
 
-# Linux/macOS
+## 3️⃣ Executar o Backend
+
+### Linux / macOS
+
+```bash
 ./mvnw spring-boot:run
+```
 
-# Windows
+### Windows
+
+```bash
 mvnw.cmd spring-boot:run
+```
 
-A API estará disponível em http://localhost:8080. O Swagger pode ser acedido em http://localhost:8080/swagger-ui/index.html.
-4. Acessar o Frontend
+---
 
-Como os ficheiros estáticos estão mapeados na pasta resources/static, basta abrir o navegador e aceder diretamente a:
+## 4️⃣ Acessar a Aplicação
 
+### API
+
+```text
+http://localhost:8080
+```
+
+### Swagger
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+### Frontend
+
+```text
 http://localhost:8080/login.html
+```
 
-📡 Endpoints da API
+---
 
-Todas as rotas de /books requerem o cabeçalho Authorization: Bearer <TOKEN_JWT>.
+# 📡 Endpoints da API
 
-    POST /user/signup: Regista um novo utilizador.
+## 👤 Usuários
 
-    POST /user/login: Autentica e devolve o token JWT.
+### Cadastro
 
-    GET /books: Lista todos os livros do utilizador autenticado.
+```http
+POST /user/signup
+```
 
-    GET /books?title={termo}: Procura livros por correspondência parcial no título.
+### Login
 
-    GET /books/filter?status={STATUS}: Filtra por status de leitura.
+```http
+POST /user/login
+```
 
-    GET /books/{id}: Obtém detalhes de um livro específico.
+---
 
-    POST /books: Adiciona um novo livro (vinculando automaticamente o ID do utilizador).
+## 📚 Livros
 
-    PUT /books/{id}: Atualiza os dados e a URL da capa do livro.
+> Todas as rotas exigem:
 
-    DELETE /books/{id}: Remove permanentemente um livro.
+```http
+Authorization: Bearer <TOKEN>
+```
 
-🔐 Gerenciamento de Sessão
+### Listar Livros
 
-    O utilizador faz login em /user/login, a API valida a senha com BCrypt e retorna o JWT.
+```http
+GET /books
+```
 
-    O frontend armazena o token no localStorage sob a chave token.
+### Buscar por Título
 
-    Em cada requisição assíncrona, o script extrai o token e injeta-o no cabeçalho HTTP:
+```http
+GET /books?title=harry
+```
 
-Authorization: Bearer <seu_token_jwt_aqui>
+### Filtrar por Status
 
-O filtro do Spring Security decodifica o token, extrai o contexto do utilizador e garante o isolamento multitenant dos dados.
+```http
+GET /books/filter?status=READ
+```
 
-🧪 Estratégia de Testes Automatizados
+### Buscar por ID
 
-Seguindo os requisitos estritos do projeto, o uso de Mocks é proibido. Toda a validação ocorre em ambiente real através do Testcontainers, que sobe uma instância efémera do MongoDB em Docker para cada execução.
-Executar a Suíte de Testes
-Bash
+```http
+GET /books/{id}
+```
 
+### Criar Livro
+
+```http
+POST /books
+```
+
+### Atualizar Livro
+
+```http
+PUT /books/{id}
+```
+
+### Remover Livro
+
+```http
+DELETE /books/{id}
+```
+
+---
+
+# 🔐 Fluxo de Autenticação
+
+1. Usuário realiza login.
+2. Senha é validada com BCrypt.
+3. API gera um JWT.
+4. Frontend salva o token no LocalStorage.
+5. Requisições enviam:
+
+```http
+Authorization: Bearer <TOKEN>
+```
+
+6. O filtro JWT do Spring Security valida o token.
+7. O usuário acessa apenas seus próprios livros.
+
+---
+
+# 🧪 Estratégia de Testes
+
+O projeto segue uma regra importante:
+
+> ❌ Não utilizar mocks
+
+Todos os testes utilizam infraestrutura real através do Testcontainers.
+
+## Executar Testes
+
+```bash
 ./mvnw clean test
+```
 
-    Testes Caixa-Branca (Service Layer): Validação de regras de negócio, consistência de dados, criptografia de senhas e integridade do isolamento de registos entre utilizadores diferentes.
+---
 
-    Testes Caixa-Preta (Controller Layer): Utilização de MockMvc para simular requisições HTTP completas, validando os filtros de segurança, retornos de códigos HTTP (201, 403, 404) e validações de payloads.
+## Testes de Serviço
 
-    Testes Parametrizados: Testes em massa para validação de múltiplos formatos de e-mails e transições do enum ReadingStatus.
+Validação de:
 
-O relatório de cobertura detalhado do JaCoCo é gerado em: target/site/jacoco/index.html.
-⚙️ Integração Contínua (CI) & Qualidade
+* Regras de negócio
+* Criptografia de senhas
+* Persistência de dados
+* Isolamento de usuários
 
-    GitHub Actions (ci.yml): Executa automaticamente o build, inicializa os containers Docker do Testcontainers, roda a suite de testes e valida a integridade do código a cada push ou pull request.
+---
 
-    SonarCloud: Atua como um Quality Gate na Cloud. Analisa o código estaticamente à procura de bugs, Code Smells, vulnerabilidades de segurança e garante o bloqueio de integrações caso a cobertura de código fique abaixo do patamar mínimo de 80%.
+## Testes de Controller
 
-Desenvolvido como projeto semestral para a disciplina de Qualidade de Software.
+Validação de:
+
+* Endpoints REST
+* Status HTTP
+* Segurança
+* Payloads
+
+---
+
+## Testes Parametrizados
+
+Cobrem:
+
+* E-mails válidos e inválidos
+* Status de leitura
+* Casos de borda
+
+---
+
+## Cobertura de Código
+
+Gerar relatório:
+
+```bash
+./mvnw clean verify
+```
+
+Relatório:
+
+```text
+target/site/jacoco/index.html
+```
+
+Meta mínima:
+
+```text
+80%
+```
+
+---
+
+# ⚙️ Integração Contínua
+
+## GitHub Actions
+
+Pipeline automatizada para:
+
+* Build
+* Testes
+* Cobertura
+* Validação de qualidade
+
+Executada a cada:
+
+* Push
+* Pull Request
+
+---
+
+## SonarCloud
+
+Análise estática de:
+
+* Bugs
+* Vulnerabilidades
+* Code Smells
+* Duplicação de código
+* Cobertura de testes
+
+O Quality Gate impede integrações que não atendam aos critérios definidos.
+
+---
+
+# 🐳 Docker & Testcontainers
+
+Os testes utilizam containers reais do MongoDB através do Testcontainers.
+
+Benefícios:
+
+* Ambiente isolado
+* Testes reproduzíveis
+* Sem dependência de banco local
+* Maior confiabilidade
+
+---
+
+# 👨‍💻 Desenvolvedor
+
+**Kaio Fernandes**
+
+* GitHub: https://github.com/kaiofernandesdevs
+
+---
+
+# 🎓 Projeto Acadêmico
+
+Desenvolvido como projeto semestral para a disciplina de **Qualidade de Software**, aplicando conceitos de:
+
+* Testes Automatizados
+* Arquitetura de Software
+* Integração Contínua
+* Segurança de Aplicações
+* Cobertura de Código
+* Boas Práticas de Desenvolvimento
+
+---
+
+<div align="center">
+
+⭐ Se gostou do projeto, deixe uma estrela no repositório!
+
+</div>
